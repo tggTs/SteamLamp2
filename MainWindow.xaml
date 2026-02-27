@@ -81,11 +81,17 @@
 
             <Border Grid.Row="0" Background="#2a2e33" MouseLeftButtonDown="Header_MouseDown" Panel.ZIndex="1">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,15,0" Height="47">
+                    <StackPanel x:Name="MainMenuStack" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,15,0" Height="47">
                         <TextBlock Text="STEAMLAMP" Foreground="White" FontWeight="Bold" VerticalAlignment="Top" Margin="0,0,20,0"/>
-                        <Button Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="-60,20,15,0" Cursor="Hand"/>
-                        <Button Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,20,15,0" Cursor="Hand" FontSize="21"/>
-                        <Button Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,20,15,0" Cursor="Hand" Click="Button_Click_1"/>
+
+                        <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" 
+                                Margin="-60,20,15,0" Cursor="Hand" Click="OpenStore_Click"/>
+
+                        <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" 
+                                Margin="0,20,15,0" Cursor="Hand" FontSize="21" Click="OpenLibrary_Click"/>
+
+                        <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" 
+                                Margin="0,20,15,0" Cursor="Hand" Click="OpenProfile_Click"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -100,6 +106,7 @@
                                 VerticalAlignment="Center"
                                 Cursor="Hand" 
                                 Click="AccountMenuButton_Click"/>
+
                         <Button Content="—" Click="MinimizeApp_Click" Style="{StaticResource WindowControlButtonStyle}"/>
                         <Button x:Name="MaximizeBtn" Content="⬜️" Click="MaximizeApp_Click" Style="{StaticResource WindowControlButtonStyle}" FontSize="12"/>
                         <Button Content="✕" Click="CloseApp_Click" Style="{StaticResource CloseButtonStyle}"/>
@@ -108,9 +115,13 @@
             </Border>
 
             <Grid Grid.Row="1" Background="#1b2838">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Магазин скоро будет здесь..." Foreground="Gray" FontSize="20"/>
-                </StackPanel>
+                <ContentControl x:Name="MainContentFrame">
+                    <Grid x:Name="DefaultStoreView">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="Магазин скоро будет здесь..." Foreground="Gray" FontSize="20"/>
+                        </StackPanel>
+                    </Grid>
+                </ContentControl>
             </Grid>
 
             <Border Grid.Row="2" Background="#171a21">

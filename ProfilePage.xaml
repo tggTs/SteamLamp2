@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="SteamLamp.ProfilePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1100">
+
+    <Grid Background="#1b2838">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="100,20,100,20">
+
+                <Grid Margin="0,0,0,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="184"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="164" Height="164" BorderBrush="#66c0f4" BorderThickness="2" HorizontalAlignment="Left">
+                        <Image Source="https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg" Stretch="UniformToFill"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                        <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="26" Foreground="White" FontWeight="Bold"/>
+                        <TextBlock Text="В сети" Foreground="#66c0f4" FontSize="14" Margin="0,5"/>
+                        <TextBlock Text="Россия" Foreground="#898989" FontSize="12"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                        <TextBlock Text="Уровень" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
+                        <Grid HorizontalAlignment="Right">
+                            <Border BorderBrush="#d9ab26" BorderThickness="2" Width="45" Height="45" Background="#222b35">
+                                <TextBlock Text="10" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                            </Border>
+                        </Grid>
+                        <Button Content="Редактировать профиль" Margin="0,20,0,0" Background="#3d4450" Foreground="White" BorderThickness="0" Padding="15,5" Cursor="Hand"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                        <Border Background="#16202d" Padding="20" CornerRadius="3">
+                            <StackPanel>
+                                <TextBlock Text="ВИТРИНА ИГР" Foreground="#66c0f4" FontSize="14" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                                <Grid Height="120">
+                                    <Rectangle Stroke="#2a2e33" StrokeThickness="1" StrokeDashArray="4 2"/>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="У вас пока что не куплены игры" Foreground="#898989" FontSize="16" HorizontalAlignment="Center"/>
+                                        <Button Content="Перейти в магазин" Margin="0,10,0,0" Background="Transparent" Foreground="#66c0f4" BorderThickness="0" Cursor="Hand" Click="GoToStore_Internal_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="ДРУЗЬЯ" Foreground="White" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <TextBlock Text="В СЕТИ (2)" Foreground="#898989" FontSize="12" Margin="0,0,0,10"/>
+
+                        <StackPanel x:Name="FriendsList">
+                            <Grid Margin="0,5">
+                                <Border Width="34" Height="34" Background="#57cbde" HorizontalAlignment="Left" CornerRadius="2"/>
+                                <TextBlock Text="Friend_1" Foreground="#66c0f4" VerticalAlignment="Center" Margin="45,0,0,0"/>
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Border Width="34" Height="34" Background="#57cbde" HorizontalAlignment="Left" CornerRadius="2"/>
+                                <TextBlock Text="Friend_2" Foreground="#66c0f4" VerticalAlignment="Center" Margin="45,0,0,0"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Separator Background="#2a2e33" Margin="0,15"/>
+                        <TextBlock Text="Группы" Foreground="White" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="SteamLamp Official" Foreground="#898989" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
