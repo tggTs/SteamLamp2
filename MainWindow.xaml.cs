@@ -29,12 +29,12 @@ namespace SteamLamp
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-        
+
         }
 
 
