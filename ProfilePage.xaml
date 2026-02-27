@@ -29,18 +29,18 @@
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="15,5,0,0">
                         <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="26" Foreground="White" FontWeight="Bold"/>
-                        <TextBlock Text="В сети (наверное)" Foreground="#66c0f4" FontSize="14" Margin="0,5"/>
-                        <TextBlock Text="Где-то в России" Foreground="#898989" FontSize="12"/>
+                        <TextBlock Text="В сети" Foreground="#66c0f4" FontSize="14" Margin="0,5"/>
+                        <TextBlock Text="Тут будет описание" Foreground="#898989" FontSize="12"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Right">
-                        <TextBlock Text="Какой-то уровень" Foreground="White" FontSize="14" Margin="0,0,0,10" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Уровень" Foreground="White" FontSize="14" Margin="0,0,0,10" HorizontalAlignment="Right"/>
                         <Grid HorizontalAlignment="Right">
                             <Border BorderBrush="#d9ab26" BorderThickness="2" Width="50" Height="50" Background="#222b35">
                                 <TextBlock Text="10" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
                             </Border>
                         </Grid>
-                        <Button Content="Тут типа настройки" Margin="0,20,0,0" Background="#3d4450" Foreground="White" BorderThickness="1" BorderBrush="#4f535b" Padding="10,5" Cursor="Hand"/>
+                        <Button Content="Тут типа настройки будут" Margin="0,20,0,0" Background="#3d4450" Foreground="White" BorderThickness="1" BorderBrush="#4f535b" Padding="10,5" Cursor="Hand"/>
                     </StackPanel>
                 </Grid>
 
@@ -68,7 +68,7 @@
 
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="СПИСОК ДРУЗЕЙ" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
-                        <TextBlock Text="КТО-ТО В СЕТИ" Foreground="#898989" FontSize="11" Margin="0,0,0,10"/>
+                        <TextBlock Text="В СЕТИ" Foreground="#898989" FontSize="11" Margin="0,0,0,10"/>
 
                         <StackPanel x:Name="FriendsList">
                             <Grid Margin="0,8">
@@ -82,7 +82,7 @@
                         </StackPanel>
 
                         <Separator Background="#2a2e33" Margin="0,15"/>
-                        <TextBlock Text="Группы (тоже не успел сделать
+                        <TextBlock Text="Группы (тоже не успел сделать)
                                    )" Foreground="Gray" FontSize="12" FontStyle="Italic"/>
                     </StackPanel>
                 </Grid>
