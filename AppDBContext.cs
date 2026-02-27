@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SteamLamp
 {
@@ -11,7 +9,7 @@ namespace SteamLamp
     {
         public AppDbContext() : base("name=DefaultConnection")
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<AppDbContext>());
+            Database.SetInitializer<AppDbContext>(null);
         }
         public DbSet<User> Users { get; set; }
     }
