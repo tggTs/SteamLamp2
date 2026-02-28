@@ -8,16 +8,16 @@
 
     <Grid Background="#1b2838">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="100,20,100,20">
+            <StackPanel Margin="50,20,50,20">
 
                 <Grid Margin="0,0,0,30">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="184"/>
+                        <ColumnDefinition Width="180"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Width="164" Height="164" BorderBrush="#66c0f4" BorderThickness="2" HorizontalAlignment="Left" Background="#212c3d">
+                    <Border Grid.Column="0" Width="164" Height="164" BorderBrush="#898989" BorderThickness="1" Background="#212c3d">
                         <TextBlock Text="Я не успел сделать&#x0a;аватарку :(" 
                                    Foreground="Gray" 
                                    FontSize="12"
@@ -27,22 +27,22 @@
                                    TextAlignment="Center"/>
                     </Border>
 
-                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="15,5,0,0">
-                        <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="26" Foreground="White" FontWeight="Bold"/>
+                    <StackPanel Grid.Column="1" Margin="20,10,0,0">
+                        <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="28" Foreground="White" FontWeight="Bold"/>
                         <TextBlock Text="В сети" Foreground="#66c0f4" FontSize="14" Margin="0,5"/>
-                        <TextBlock Text="Тут будет описание" Foreground="#898989" FontSize="12"/>
+                        <TextBlock Text="Тут будет описание (когда-нибудь)" Foreground="#898989" FontSize="12" Margin="0,10,0,0"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" HorizontalAlignment="Right">
                         <TextBlock Text="Уровень" Foreground="White" FontSize="14" Margin="0,0,0,10" HorizontalAlignment="Right"/>
-                        <Grid HorizontalAlignment="Right">
-                            <Border BorderBrush="#d9ab26" BorderThickness="2" Width="50" Height="50" Background="#222b35">
-                                <TextBlock Text="10" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" FontWeight="Bold"/>
-                            </Border>
-                        </Grid>
-                        <Button Content="Тут типа настройки будут" Margin="0,20,0,0" Background="#3d4450" Foreground="White" BorderThickness="1" BorderBrush="#4f535b" Padding="10,5" Cursor="Hand"/>
+                        <Border BorderBrush="#d9ab26" BorderThickness="2" Width="45" Height="45" Background="#222b35" HorizontalAlignment="Right">
+                            <TextBlock Text="10" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                        </Border>
+                        <Button Content="Редактирование" Margin="0,20,0,0" Width="120" Height="30" Background="#3d4450" Foreground="White" Cursor="Hand"/>
                     </StackPanel>
                 </Grid>
+
+                <Separator Background="#2a2e33" Margin="0,0,0,20"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -51,41 +51,41 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Margin="0,0,20,0">
-                        <Border Background="#16202d" Padding="20" BorderBrush="#2a2e33" BorderThickness="1">
+                        <Border Background="#16202d" BorderBrush="#2a2e33" BorderThickness="1" Padding="15">
                             <StackPanel>
-                                <TextBlock Text="ВИТРИНА ИГР" Foreground="#66c0f4" FontSize="13" FontWeight="Bold" Margin="0,0,0,20"/>
+                                <TextBlock Text="ВИТРИНА ИГР" Foreground="#66c0f4" FontSize="13" FontWeight="Bold" Margin="0,0,0,15"/>
 
-                                <Grid Height="150">
-                                    <Rectangle Stroke="#2a2e33" StrokeThickness="2" StrokeDashArray="2 2"/>
+                                <Border Height="150" BorderBrush="#2a2e33" BorderThickness="1" Background="#1b2838">
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="Тут должны быть игры, но я их не купил..." Foreground="Gray" FontSize="14" HorizontalAlignment="Center"/>
-                                        <Button Content="Жми сюда для магазина" Margin="0,15,0,0" Background="Transparent" Foreground="#66c0f4" BorderThickness="0" Cursor="Hand" Click="GoToStore_Internal_Click" FontSize="12" FontStyle="Italic"/>
+                                        <TextBlock Text="Тут должны быть игры, но я их не купил..." Foreground="Gray" HorizontalAlignment="Center"/>
+                                        <Button Content="Перейти в магазин" Margin="0,10,0,0" Background="Transparent" Foreground="#66c0f4" BorderThickness="0" Click="GoToStore_Internal_Click" Cursor="Hand"/>
                                     </StackPanel>
-                                </Grid>
+                                </Border>
                             </StackPanel>
                         </Border>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="СПИСОК ДРУЗЕЙ" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
-                        <TextBlock Text="В СЕТИ" Foreground="#898989" FontSize="11" Margin="0,0,0,10"/>
 
                         <StackPanel x:Name="FriendsList">
-                            <Grid Margin="0,8">
-                                <Border Width="32" Height="32" Background="#4b5055" HorizontalAlignment="Left"/>
-                                <TextBlock Text="Друг №1" Foreground="#66c0f4" VerticalAlignment="Center" Margin="42,0,0,0"/>
+                            <Grid Margin="0,5">
+                                <Border Width="30" Height="30" Background="#4b5055" HorizontalAlignment="Left"/>
+                                <TextBlock Text="Друг №1" Foreground="#66c0f4" VerticalAlignment="Center" Margin="40,0,0,0"/>
                             </Grid>
-                            <Grid Margin="0,8">
-                                <Border Width="32" Height="32" Background="#4b5055" HorizontalAlignment="Left"/>
-                                <TextBlock Text="Друг №2" Foreground="#66c0f4" VerticalAlignment="Center" Margin="42,0,0,0"/>
+                            <Grid Margin="0,5">
+                                <Border Width="30" Height="30" Background="#4b5055" HorizontalAlignment="Left"/>
+                                <TextBlock Text="Друг №2" Foreground="#66c0f4" VerticalAlignment="Center" Margin="40,0,0,0"/>
                             </Grid>
                         </StackPanel>
 
                         <Separator Background="#2a2e33" Margin="0,15"/>
-                        <TextBlock Text="Группы (тоже не успел сделать)
-                                   )" Foreground="Gray" FontSize="12" FontStyle="Italic"/>
+
+                        <TextBlock Text="Группы" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <TextBlock Text="Групп пока нет. Совсем. Та и я их не делал" Foreground="Gray" FontSize="11" FontStyle="Italic"/>
                     </StackPanel>
                 </Grid>
+
             </StackPanel>
         </ScrollViewer>
     </Grid>

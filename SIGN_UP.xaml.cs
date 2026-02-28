@@ -1,17 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 
 namespace SteamLamp
 {
@@ -32,80 +25,97 @@ namespace SteamLamp
             int n1 = rnd.Next(1, 15);
             int n2 = rnd.Next(1, 15);
             captchaResult = n1 + n2;
-            CaptchaText.Text = $"{n1} + {n2} = ";
+            CaptchaText.Text = n1.ToString() + " + " + n2.ToString() + " = ";
             CaptchaInput.Text = "";
         }
+
         private void ShowSteamMessage(string title, string message, bool isError = false)
         {
             NotificationTitle.Text = title;
             NotificationMessage.Text = message;
-            NotificationTitle.Foreground = isError ? Brushes.Red : new SolidColorBrush(Color.FromRgb(102, 192, 244));
+            if (isError == true)
+            {
+                NotificationTitle.Foreground = Brushes.Red;
+            }
+            else
+            {
+                NotificationTitle.Foreground = new SolidColorBrush(Color.FromRgb(102, 192, 244));
+            }
             NotificationOverlay.Visibility = Visibility.Visible;
         }
+
         private void CloseNotification_Click(object sender, RoutedEventArgs e)
         {
             NotificationOverlay.Visibility = Visibility.Collapsed;
-            if (isRegistrationSuccess) OpenMainWindow();
-        }
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(RegLogin.Text) || string.IsNullOrWhiteSpace(RegNick.Text) || string.IsNullOrWhiteSpace(RegPass.Password))
+            if (isRegistrationSuccess == true)
             {
-                ShowSteamMessage("ОШИБКА", "Пожалуйста, заполните все поля регистрации!", true);
+                OpenMainWindow();
+            }
+        }
+        private async void Register_Click(object sender, RoutedEventArgs e)
+        {
+            if (RegLogin.Text == "" || RegNick.Text == "" || RegPass.Password == "")
+            {
+                ShowSteamMessage("ОШИБКА", "Заполните все поля!", true);
                 return;
             }
             if (CaptchaInput.Text != captchaResult.ToString())
             {
-                ShowSteamMessage("ОШИБКА", "Капча введена неверно!", true);
+                ShowSteamMessage("ОШИБКА", "Неверная капча!", true);
                 GenerateCaptcha();
                 return;
             }
-
+            LoadingOverlay.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
             try
             {
                 using (AppDbContext db = new AppDbContext())
                 {
                     if (db.Users.Any(u => u.Login == RegLogin.Text))
                     {
-                        ShowSteamMessage("ОШИБКА", "Этот логин уже занят!", true);
+                        ShowSteamMessage("ОШИБКА", "Логин занят!", true);
+                        LoadingOverlay.Visibility = Visibility.Collapsed;
                         return;
                     }
 
-                    User newUser = new User
-                    {
-                        Login = RegLogin.Text,
-                        Nickname = RegNick.Text,
-                        Password = RegPass.Password,
-                        Balance = 0
-                    };
+                    User newUser = new User();
+                    newUser.Login = RegLogin.Text;
+                    newUser.Nickname = RegNick.Text;
+                    newUser.Password = RegPass.Password;
+                    newUser.Balance = 0;
 
                     db.Users.Add(newUser);
                     db.SaveChanges();
+
                     Session.CurrentUser = newUser;
                     Session.LoginSource = "Registration";
-
                     isRegistrationSuccess = true;
-                    ShowSteamMessage("УСПЕХ", "Аккаунт создан! Добро пожаловать в Steam Lamp.");
+                    ShowSteamMessage("УСПЕХ", "Вы зарегистрированы!");
                 }
             }
             catch (Exception ex)
             {
-                ShowSteamMessage("ОШИБКА БАЗЫ", "Не удалось сохранить данные: " + ex.Message, true);
+                ShowSteamMessage("ОШИБКА", "Что-то пошло не так: " + ex.Message, true);
             }
-        }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+            LoadingOverlay.Visibility = Visibility.Collapsed;
+        }
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(LogNick.Text) || string.IsNullOrWhiteSpace(LogPass.Password))
+            if (LogNick.Text == "" || LogPass.Password == "")
             {
-                ShowSteamMessage("ОШИБКА", "Введите никнейм и пароль!", true);
+                ShowSteamMessage("ОШИБКА", "Введите данные!", true);
                 return;
             }
+
+            LoadingOverlay.Visibility = Visibility.Visible;
+            await Task.Delay(1500);
             try
             {
                 using (AppDbContext db = new AppDbContext())
                 {
                     var user = db.Users.FirstOrDefault(u => u.Nickname == LogNick.Text && u.Password == LogPass.Password);
+
                     if (user != null)
                     {
                         Session.CurrentUser = user;
@@ -114,16 +124,17 @@ namespace SteamLamp
                     }
                     else
                     {
-                        ShowSteamMessage("ОШИБКА", "Неверный никнейм или пароль!", true);
+                        ShowSteamMessage("ОШИБКА", "Неверный ник или пароль!", true);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ShowSteamMessage("ОШИБКА СВЯЗИ", "База данных недоступна: " + ex.Message, true);
+                ShowSteamMessage("ОШИБКА", "Ошибка базы: " + ex.Message, true);
             }
-        }
 
+            LoadingOverlay.Visibility = Visibility.Collapsed;
+        }
         private void OpenMainWindow()
         {
             MainWindow main = new MainWindow();
@@ -132,17 +143,20 @@ namespace SteamLamp
         }
         private void Header_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
-
-        private void Close_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
-
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
         private void SwitchToLogin_Click(object sender, MouseButtonEventArgs e)
         {
             RegisterForm.Visibility = Visibility.Collapsed;
             LoginForm.Visibility = Visibility.Visible;
         }
-
         private void SwitchToRegister_Click(object sender, MouseButtonEventArgs e)
         {
             LoginForm.Visibility = Visibility.Collapsed;

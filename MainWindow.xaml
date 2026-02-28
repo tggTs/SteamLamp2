@@ -9,7 +9,6 @@
         AllowsTransparency="True" 
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
-
     <Window.Resources>
         <Style x:Key="WindowControlButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -33,7 +32,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowControlButtonStyle}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -41,7 +39,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="SteamMenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="LightGray"/>
@@ -60,7 +57,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
-                            <Trigger Property="IsFocused" Value="True">
+                            <Trigger Property="Tag" Value="Selected">
                                 <Setter Property="Foreground" Value="#66c0f4"/>
                                 <Setter TargetName="Underline" Property="Visibility" Value="Visible"/>
                             </Trigger>
@@ -70,7 +67,6 @@
             </Setter>
         </Style>
     </Window.Resources>
-
     <Border Background="#1b2838" BorderBrush="#2a2e33" BorderThickness="1" ClipToBounds="True" CornerRadius="20">
         <Grid>
             <Grid.RowDefinitions>
@@ -78,7 +74,6 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="35"/>
             </Grid.RowDefinitions>
-
             <Border Grid.Row="0" Background="#2a2e33" MouseLeftButtonDown="Header_MouseDown" Panel.ZIndex="1">
                 <Grid>
                     <StackPanel x:Name="MainMenuStack" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,15,0" Height="47">
@@ -93,7 +88,6 @@
                         <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" 
                                 Margin="0,20,15,0" Cursor="Hand" Click="OpenProfile_Click"/>
                     </StackPanel>
-
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
                         <Button x:Name="AccountMenuButton" 
                                 Content="NickNAME ▼" 
