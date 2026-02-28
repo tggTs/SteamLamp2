@@ -9,8 +9,10 @@ namespace SteamLamp
     {
         public AppDbContext() : base("name=DefaultConnection")
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<AppDbContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<AppDbContext>());
         }
+
         public DbSet<User> Users { get; set; }
+        public DbSet<Friend> Friends { get; set; }
     }
 }

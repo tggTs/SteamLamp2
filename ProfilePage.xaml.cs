@@ -21,5 +21,13 @@ namespace SteamLamp
                 main.OpenStore_Click(null, null);
             }
         }
+        private void OpenFriends_Click(object sender, RoutedEventArgs e)
+        {
+            var friendsView = new FriendsListControl();
+            friendsView.FriendsNickName.Text = this.ProfileNickname.Text;
+            FriendsOverlay.Content = friendsView;
+            MainProfileLayout.Visibility = Visibility.Collapsed;
+            FriendsOverlay.Visibility = Visibility.Visible;
+        }
     }
 }
