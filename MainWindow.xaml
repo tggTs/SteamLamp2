@@ -111,9 +111,55 @@
             <Grid Grid.Row="1" Background="#1b2838">
                 <ContentControl x:Name="MainContentFrame">
                     <Grid x:Name="DefaultStoreView">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="Магазин скоро будет здесь..." Foreground="Gray" FontSize="20"/>
-                        </StackPanel>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="30,20">
+                                <TextBlock Text="ПОПУЛЯРНОЕ" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+                                <Border Background="#16202d" Height="300" BorderBrush="#2a2e33" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="#212c3d" Margin="10">
+                                            <TextBlock Text="IMAGE PLACEHOLDER" Foreground="#3d4450" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="10,20">
+                                            <TextBlock Text="CyberLamp 2026" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                                            <TextBlock Text="От создателей LampSoft" Foreground="#898989" FontSize="12" Margin="0,5"/>
+                                            <Border Background="#3d4450" HorizontalAlignment="Left" Padding="5,2" Margin="0,15">
+                                                <TextBlock Text="ЛИДЕР ПРОДАЖ" Foreground="White" FontSize="10"/>
+                                            </Border>
+                                            <TextBlock Text="1999 руб." Foreground="White" FontSize="18" VerticalAlignment="Bottom" Margin="0,80,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <UniformGrid Columns="3" Margin="0,20,0,0">
+                                    <Border Background="#16202d" Height="180" Margin="0,0,10,0">
+                                        <StackPanel>
+                                            <Border Background="#212c3d" Height="100" Margin="5"/>
+                                            <TextBlock Text="Dota 3" Foreground="White" Margin="10,5,0,0"/>
+                                            <TextBlock Text="Бесплатно" Foreground="#66c0f4" Margin="10,2,0,0" FontSize="12"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="#16202d" Height="180" Margin="5,0">
+                                        <StackPanel>
+                                            <Border Background="#212c3d" Height="100" Margin="5"/>
+                                            <TextBlock Text="CS 1.7" Foreground="White" Margin="10,5,0,0"/>
+                                            <TextBlock Text="499 руб." Foreground="#66c0f4" Margin="10,2,0,0" FontSize="12"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="#16202d" Height="180" Margin="10,0,0,0">
+                                        <StackPanel>
+                                            <Border Background="#212c3d" Height="100" Margin="5"/>
+                                            <TextBlock Text="Student Sim" Foreground="White" Margin="10,5,0,0"/>
+                                            <TextBlock Text="99 руб." Foreground="#66c0f4" Margin="10,2,0,0" FontSize="12"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                 </ContentControl>
             </Grid>
