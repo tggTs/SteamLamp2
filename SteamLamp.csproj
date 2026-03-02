@@ -146,6 +146,7 @@
     <Compile Include="FriendsListControl.xaml.cs">
       <DependentUpon>FriendsListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Games.cs" />
     <Compile Include="LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
     </Compile>

@@ -6,21 +6,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace SteamLamp
 {
+    
     public partial class MainWindow : Window
     {
+        private List<Game> _showcaseGames;
         private int _currentPage = 0;
-        private const int TotalPages = 5;
         private HashSet<string> _cartItems = new HashSet<string>();
-        private string[] _gameTitles = { "Teardown", "Cities: Skylines II", "Satisfactory", "Upload Labs", "BeamnNG.drive" };
-        private string[] _gamePrices = { "1999 руб.", "3049 руб.", "2099 руб.", "Бесплатно", "849 руб." };
-
         public MainWindow()
         {
             InitializeComponent();
 
+            this.Loaded += (s, e) => { MainContentFrame.Content = DefaultStoreView; LoadGamesFromDB(); };
             if (Session.CurrentUser != null)
             {
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
@@ -29,25 +31,38 @@ namespace SteamLamp
             UpdateMenuHighlight(BtnStore);
 
         }
+        private void LoadGamesFromDB() 
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var allGames = db.Games.Where(g => !g.IsShowcase).ToList();
+                    GamesListControl.ItemsSource = allGames;
+                    _showcaseGames = db.Games.Where(g => g.IsShowcase).ToList();
+                    if (_showcaseGames != null && _showcaseGames.Any())
+                    {
+                        _currentPage = 0;
+                        UpdateShowcase();
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+
+                MessageBox.Show("Ошибка загрузки Базы: " + error.Message);
+            }
+           
+        }
 
         public void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            string gameToAdd = "";
-            if (_currentPage >= 0 && _currentPage < _gameTitles.Length) 
+            e.Handled = true;
+            var btn = sender as Button;
+            string gameToAdd = btn.Tag?.ToString();
+            if (string.IsNullOrEmpty(gameToAdd)) 
             {
-                var btn = sender as Button;
-                var parent = btn.Parent as StackPanel;
-                if (parent != null) 
-                {
-                    foreach (var chils in parent.Children) 
-                    {
-                        if (chils is TextBlock tb && (tb.Name == "ShowcaseName" || tb.Margin.Top == 5)) 
-                        {
-                            gameToAdd += tb.Text;
-                            break;
-                        }
-                    }
-                }
+                gameToAdd = ModalGameTitle.Text;
             }
             if (!string.IsNullOrEmpty(gameToAdd) && !_cartItems.Contains(gameToAdd)) 
             {
@@ -68,7 +83,7 @@ namespace SteamLamp
 
         public void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentPage < TotalPages - 1)
+            if (_showcaseGames != null && _currentPage < _showcaseGames.Count-1)
             {
                 _currentPage++;
                 UpdateShowcase();
@@ -86,9 +101,14 @@ namespace SteamLamp
 
         public void UpdateShowcase()
         {
-            ShowcaseName.Text = _gameTitles[_currentPage];
-            ShowcasePrice.Text = _gamePrices[_currentPage];
-            ShowcaseGameTitle.Text = _gameTitles[_currentPage];
+            if (_showcaseGames ==null || !_showcaseGames.Any())
+            {
+                return;
+            }
+            var currentGame = _showcaseGames[_currentPage];
+            ShowcaseName.Text = currentGame.Title;
+            ShowcasePrice.Text = currentGame.Price;
+            ShowcaseGameTitle.Text = currentGame.Title;
 
             if (PageIndicators != null)
             {
@@ -114,6 +134,7 @@ namespace SteamLamp
         {
             MainContentFrame.Content = DefaultStoreView;
             UpdateMenuHighlight(BtnStore);
+            LoadGamesFromDB();
         }
 
         private void OpenLibrary_Click(object sender, RoutedEventArgs e)
@@ -179,6 +200,49 @@ namespace SteamLamp
             authWindow.LoginForm.Visibility = Visibility.Visible;
             authWindow.Show();
             this.Close();
+        }
+        private void GameCard_Click(object sender, RoutedEventArgs e) 
+        {
+            var btn = sender as Button;
+            var game = btn.Tag as Game;
+            if (game != null)
+            {
+                ModalGameTitle.Text = game.Title;
+                ModalGameDesc.Text = game.Description;
+                ModalGamePrice.Text = game.Price;
+                ModalBuyBtn.Tag = game.Title;
+                if (game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
+                {
+                    ModalBuyBtn.Content = "Добавить в Библиотеку";
+                }
+                else 
+                {
+                    ModalBuyBtn.Content = "В корзину";
+                }
+                    GameDetailsOverlay.Visibility = Visibility.Visible;
+            }
+        }
+        private void CloseOverlay_Click(object sender, RoutedEventArgs e) 
+        {
+            GameDetailsOverlay.Visibility = Visibility.Collapsed;
+        }
+        
+    }
+    public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter 
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string price = value as string;
+            if (price != null && price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
+            {
+                return "В БИБЛИОТЕКУ";
+            }
+            return "В КОРЗИНУ";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
