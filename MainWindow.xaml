@@ -173,7 +173,7 @@
                                     <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" Tag="Поиск по названию..."/>
 
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Button x:Name="BtnCart" Content="🛒 КОРЗИНА" Foreground="White" Background="#3d4450" Padding="10,5" BorderThickness="0" Cursor="Hand"/>
+                                        <Button x:Name="BtnCart" Click="OpenCart_Click" Content="🛒 КОРЗИНА" Foreground="White" Background="#3d4450" Padding="10,5" BorderThickness="0" Cursor="Hand" />
                                         <Border Background="#66c0f4" CornerRadius="2" Margin="5,0,0,0" Padding="5,2">
                                             <TextBlock x:Name="CartCountText" Text="0" Foreground="Black" FontWeight="Bold"/>
                                         </Border>
