@@ -15,6 +15,7 @@ namespace SteamLamp
     
     public partial class MainWindow : Window
     {
+        private List<Game> _cartList = new List<Game>();
         private List<Game> _showcaseGames;
         private int _currentPage = 0;
         private HashSet<string> _cartItems = new HashSet<string>();
@@ -59,19 +60,24 @@ namespace SteamLamp
         {
             e.Handled = true;
             var btn = sender as Button;
-            string gameToAdd = btn.Tag?.ToString();
-            if (string.IsNullOrEmpty(gameToAdd)) 
+            Game gameToAdd = btn.DataContext as Game;
+            if (gameToAdd ==null) 
             {
-                gameToAdd = ModalGameTitle.Text;
+                string title = btn.Tag?.ToString() ?? ModalGameTitle.Text;
+                using (var db = new AppDbContext()) 
+                {
+                    gameToAdd = db.Games.FirstOrDefault(g => g.Title == title);
+                }
             }
-            if (!string.IsNullOrEmpty(gameToAdd) && !_cartItems.Contains(gameToAdd)) 
+            if (gameToAdd != null && !_cartList.Any(g => g.Title == gameToAdd.Title)) 
             {
-                _cartItems.Add(gameToAdd);
+                _cartList.Add(gameToAdd);
                 CartCountText.Text = _cartItems.Count.ToString();
+                UpdateCartUI();
                 var blueBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
                 var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
 
-                BtnCart.Background = blueBrush;
+                BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
                 var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
                 timer.Tick += (s, args) => {
                     BtnCart.Background = defaultBrush;
@@ -79,6 +85,10 @@ namespace SteamLamp
                 };
                 timer.Start();
             }
+        }
+        private void UpdateCartUI() 
+        {
+            CartCountText.Text = _cartList.Count.ToString();
         }
 
         public void NextPage_Click(object sender, RoutedEventArgs e)
@@ -226,7 +236,25 @@ namespace SteamLamp
         {
             GameDetailsOverlay.Visibility = Visibility.Collapsed;
         }
-        
+
+        private void BtnCart_Click(object sender, RoutedEventArgs e)
+        {
+            var cartPage = new CartPage(_cartList, this);
+            MainContentFrame.Content = cartPage;
+        }
+
+        public void OpenCart_Click(object sender, RoutedEventArgs e)
+        {
+            MainContentFrame.Content = new CartPage(_cartList, this);
+            BtnStore.Tag = null;
+            BtnLibrary.Tag = null;
+            BtnProfile.Tag = null;
+        }
+        public void ClearCart() 
+        {
+            _cartList.Clear();
+            CartCountText.Text = "0";
+        }
     }
     public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter 
     {
@@ -245,4 +273,5 @@ namespace SteamLamp
             throw new NotImplementedException();
         }
     }
+
 }

@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="SteamLamp.CartPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#1b2838">
+    <UserControl.Resources>
+        <Style x:Key="BuyButtonStyle" TargetType="Button">
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="40,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="ВАША КОРЗИНА" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="CartItemsControl">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#16202d" Margin="0,0,0,10" Padding="15">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Background="#212c3d" Height="60" Width="100">
+                                    <TextBlock Text="IMAGE" Foreground="#3d4450" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0">
+                                    <TextBlock Text="{Binding Title}" Foreground="White" FontSize="18"/>
+                                    <Button Content="Удалить" Foreground="#a3a3a3" Background="Transparent" BorderThickness="0" 
+                                            HorizontalAlignment="Left" Cursor="Hand" Click="RemoveItem_Click" Tag="{Binding}"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="2" Text="{Binding Price}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="#16202d" Padding="20" Margin="0,20,0,0">
+            <StackPanel>
+                <Grid>
+                    <TextBlock Text="Итоговая сумма:" Foreground="#898989" FontSize="16"/>
+                    <TextBlock x:Name="TotalAmountText" Text="0 руб." Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
+                </Grid>
+                <Button Content="Купить для себя" HorizontalAlignment="Right" Margin="0,15,0,0" 
+                        Width="200" Height="35" Style="{StaticResource BuyButtonStyle}" Click="Purchase_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

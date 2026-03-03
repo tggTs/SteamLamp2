@@ -142,6 +142,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppDBContext.cs" />
+    <Compile Include="CartPage.xaml.cs">
+      <DependentUpon>CartPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Friend.cs" />
     <Compile Include="FriendsListControl.xaml.cs">
       <DependentUpon>FriendsListControl.xaml</DependentUpon>
@@ -149,6 +152,9 @@
     <Compile Include="Games.cs" />
     <Compile Include="LibraryPage.xaml.cs">
       <DependentUpon>LibraryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentPage.xaml.cs">
+      <DependentUpon>PaymentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ProfilePage.xaml.cs">
       <DependentUpon>ProfilePage.xaml</DependentUpon>
@@ -158,6 +164,10 @@
     <Compile Include="SIGN_UP.xaml.cs">
       <DependentUpon>SIGN_UP.xaml</DependentUpon>
     </Compile>
+    <Page Include="CartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FriendsListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +188,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PaymentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ProfilePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
