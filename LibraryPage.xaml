@@ -4,23 +4,132 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="550" d:DesignWidth="1100">
+             d:DesignHeight="600" d:DesignWidth="1000"
+             Background="#1b2838">
 
-    <Grid Background="#1b2838">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Библиотека будет добавлена позже..." 
-                       Foreground="Gray" 
-                       FontSize="20" 
-                       HorizontalAlignment="Center"/>
+    <UserControl.Resources>
+        <Style x:Key="SteamListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Bd" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#3d4450"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1a9fff"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
-            <Button Content="ВЕРНУТЬСЯ В МАГАЗИН" 
-                    Margin="0,20,0,0" 
-                    Padding="15,5" 
-                    Background="#3d4450" 
-                    Foreground="White" 
-                    BorderThickness="0" 
-                    Cursor="Hand" 
-                    Click="GoToStore_Click"/>
-        </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background="#212b33">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="ДОМАШНЯЯ СТРАНИЦА" Foreground="White" FontSize="13" FontWeight="SemiBold" Margin="20,15,15,10"/>
+
+            <Border Grid.Row="1" Background="#171a21" Margin="15,5" CornerRadius="2" Height="26">
+                <TextBox Background="Transparent" BorderThickness="0" Foreground="#898e91" 
+                         VerticalContentAlignment="Center" Padding="8,0" Text="Поиск..." FontSize="11"/>
+            </Border>
+
+            <ListBox Grid.Row="2" x:Name="GamesList" 
+                     Background="Transparent" 
+                     BorderThickness="0" 
+                     ItemContainerStyle="{StaticResource SteamListBoxItemStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="16" Height="16" Fill="#66c0f4" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding Title}" Foreground="#969696" FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Button Grid.Row="3" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="15,15" Cursor="Hand">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="+" Foreground="#676b6f" FontSize="18" Margin="0,-2,8,0" FontWeight="Bold"/>
+                    <TextBlock Text="ДОБАВИТЬ ИГРУ" Foreground="#676b6f" FontSize="11" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="320"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Image Stretch="UniformToFill" Source="https://via.placeholder.com/1000x400/1b2838/ffffff?text=Game+Banner"/>
+                    <Border>
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color="Transparent" Offset="0.5"/>
+                                <GradientStop Color="#1b2838" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Row="1" Background="#2a323d" Margin="0,-50,0,0" Padding="40,25">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="170" Height="50" BorderThickness="0" Cursor="Hand" Foreground="White">
+                            <Button.Background>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="#75b022" Offset="0"/>
+                                    <GradientStop Color="#588a1b" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                            <TextBlock Text="ИГРАТЬ" FontSize="18" FontWeight="Bold"/>
+                        </Button>
+
+                        <StackPanel Margin="40,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="ПОСЛЕДНИЙ ЗАПУСК" Foreground="#898e91" FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="Сегодня" Foreground="White" FontSize="13" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="40,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="ВРЕМЯ В ИГРЕ" Foreground="#898e91" FontSize="10" FontWeight="Bold"/>
+                            <TextBlock Text="124 ч." Foreground="White" FontSize="13" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Row="2" Margin="40,30">
+                    <TextBlock Text="ПОСЛЕДНЯЯ АКТИВНОСТЬ" Foreground="White" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,15"/>
+                    <Border Background="#101822" Height="100" CornerRadius="4">
+                        <TextBlock Text="Нет недавних событий" Foreground="#4f535b" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
