@@ -44,7 +44,7 @@
                                     <TextBlock Text="10" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <Button Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand"/>
+                            <Button Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand" Click="Button_Click"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -73,16 +73,10 @@
                                     <TextBlock Text="ДРУЗЬЯ" Foreground="White" FontSize="12" FontWeight="Bold"/>
                                     <Button Content="Все" HorizontalAlignment="Right" Foreground="#66c0f4" Background="Transparent" BorderThickness="0" Click="OpenFriends_Click" Cursor="Hand"/>
                                 </Grid>
-                                <StackPanel>
-                                    <Grid Margin="0,0,0,8">
-                                        <Border Width="30" Height="30" Background="#66c0f4"/>
-                                        <TextBlock Text="Ivan_Prog" Foreground="#66c0f4" VerticalAlignment="Center" Margin="40,0,0,0" FontSize="12"/>
-                                    </Grid>
-                                    <Grid Margin="0,0,0,8">
-                                        <Border Width="30" Height="30" Background="#57cbde"/>
-                                        <TextBlock Text="Sanya_3D" Foreground="#57cbde" VerticalAlignment="Center" Margin="40,0,0,0" FontSize="12"/>
-                                    </Grid>
+
+                                <StackPanel x:Name="FriendsPreviewContainer">
                                 </StackPanel>
+
                             </StackPanel>
                         </Border>
                     </StackPanel>

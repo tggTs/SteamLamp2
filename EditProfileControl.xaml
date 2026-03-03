@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="SteamLamp.EditProfileControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#1b2838">
+    <UserControl.Resources>
+        <Style x:Key="SteamTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#171a21"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2a2e33"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{TemplateBinding Tag}" 
+                                       Foreground="#4f535b" 
+                                       IsHitTestVisible="False"
+                                       Margin="13,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed" 
+                                       x:Name="Watermark"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="Watermark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border x:Name="EditMainPanel" Background="#16202d" BorderBrush="#2a2e33" BorderThickness="1" Padding="30" VerticalAlignment="Top" Margin="0,40,0,0" HorizontalAlignment="Center">
+            <StackPanel Width="450">
+                <TextBlock Text="РЕДАКТИРОВАНИЕ ПРОФИЛЯ" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,0,0,25"/>
+
+                <TextBlock Text="АВАТАР" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                <Grid Margin="0,0,0,5">
+                    <Button x:Name="BtnOpenAvatarStore" Content="Выберите аватар" Width="150" Height="32" HorizontalAlignment="Left" 
+                            Background="#3d4450" Foreground="White" BorderThickness="0" Click="BtnOpenAvatarStore_Click" Cursor="Hand"/>
+
+                    <Border x:Name="CurrentAvatarPreview" Width="40" Height="40" HorizontalAlignment="Right" Background="#66c0f4" BorderBrush="#66c0f4" BorderThickness="1"/>
+                </Grid>
+                <TextBlock Text="Выберите аватарку из нескольких предложенных" Foreground="#4f535b" FontSize="10" Margin="0,0,0,20"/>
+
+                <TextBlock Text="ИЗМЕНЕНИЕ НИКНЕЙМА" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,10,0,5"/>
+                <TextBox x:Name="EditNickname" Style="{StaticResource SteamTextBox}" 
+                         Tag="Введите новый никнейм" FontSize="14" TextChanged="Field_TextChanged"/>
+
+                <TextBlock Text="ОПИСАНИЕ" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,20,0,5"/>
+                <TextBox x:Name="EditBio" Style="{StaticResource SteamTextBox}" 
+                         Tag="Добавьте описание профиля" Height="100" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="Field_TextChanged"/>
+
+                <Button x:Name="SaveBtn" Content="Сохранить изменения" Margin="0,30,0,0" Height="40" 
+                        Background="#3d4450" Foreground="#898989" IsEnabled="False" BorderThickness="0" Click="SaveBtn_Click" Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+
+        <Border x:Name="AvatarPickerOverlay" Background="#1b2838" Visibility="Collapsed" Padding="30">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Выберите аватарку из уже присутствующих" Foreground="White" FontSize="16" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+                <UniformGrid Columns="3" Width="240">
+                    <Button Tag="#66c0f4" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#66c0f4"/>
+                    </Button>
+                    <Button Tag="#57cbde" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#57cbde"/>
+                    </Button>
+                    <Button Tag="#d9ab26" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#d9ab26"/>
+                    </Button>
+                    <Button Tag="#ff4b4b" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#ff4b4b"/>
+                    </Button>
+                    <Button Tag="#ae4bff" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#ae4bff"/>
+                    </Button>
+                    <Button Tag="#4fff4b" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
+                        <Border Width="60" Height="60" Background="#4fff4b"/>
+                    </Button>
+                </UniformGrid>
+
+                <Button Content="Назад" Margin="0,30,0,0" Width="100" Height="30" Background="#3d4450" Foreground="White" BorderThickness="0" Click="CloseAvatarPicker_Click" Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

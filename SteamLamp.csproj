@@ -142,6 +142,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppDBContext.cs" />
+    <Compile Include="EditProfileControl.xaml.cs">
+      <DependentUpon>EditProfileControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Friend.cs" />
     <Compile Include="FriendsListControl.xaml.cs">
       <DependentUpon>FriendsListControl.xaml</DependentUpon>
@@ -158,6 +161,10 @@
     <Compile Include="SIGN_UP.xaml.cs">
       <DependentUpon>SIGN_UP.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditProfileControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FriendsListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

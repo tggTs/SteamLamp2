@@ -24,5 +24,6 @@ namespace SteamLamp
         public string Password { get; set; }
 
         public decimal Balance { get; set; } = 0;
+        public string Bio { get; set; } = "Добавьте описание профиля";
     }
 }

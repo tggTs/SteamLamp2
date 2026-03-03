@@ -143,7 +143,7 @@ namespace SteamLamp
             UpdateMenuHighlight(BtnLibrary);
         }
 
-        private void OpenProfile_Click(object sender, RoutedEventArgs e)
+        public void OpenProfile_Click(object sender, RoutedEventArgs e)
         {
             ProfilePage profilePage = new ProfilePage();
             MainContentFrame.Content = profilePage;
