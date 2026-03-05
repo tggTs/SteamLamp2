@@ -12,16 +12,25 @@ namespace SteamLamp
         public ProfilePage()
         {
             InitializeComponent();
+            LoadUserData();
+        }
+        public void LoadUserData()
+        {
             if (Session.CurrentUser != null)
             {
                 ProfileNickname.Text = Session.CurrentUser.Nickname;
+                ProfileBio.Text = string.IsNullOrWhiteSpace(Session.CurrentUser.Bio)
+                    ? "Описание профиля не заполнено."
+                    : Session.CurrentUser.Bio;
                 LoadFriendsPreview();
             }
         }
+
         private void LoadFriendsPreview()
         {
             if (Session.CurrentUser == null) return;
             FriendsPreviewContainer.Children.Clear();
+
             using (var db = new AppDbContext())
             {
                 int myId = Session.CurrentUser.Id;
@@ -38,7 +47,8 @@ namespace SteamLamp
                         Width = 30,
                         Height = 30,
                         Background = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
-                        HorizontalAlignment = HorizontalAlignment.Left
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        CornerRadius = new CornerRadius(2)
                     });
                     fGrid.Children.Add(new TextBlock
                     {
@@ -53,6 +63,7 @@ namespace SteamLamp
                 }
             }
         }
+
         private void OpenFriends_Click(object sender, RoutedEventArgs e)
         {
             var friendsView = new FriendsListControl();
@@ -68,11 +79,11 @@ namespace SteamLamp
                 main.OpenStore_Click(null, null);
             }
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var editControl = new EditProfileControl();
             FriendsOverlay.Content = editControl;
+
             MainProfileLayout.Visibility = Visibility.Collapsed;
             FriendsOverlay.Visibility = Visibility.Visible;
         }

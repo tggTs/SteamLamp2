@@ -304,7 +304,9 @@
                         <TextBlock x:Name="UserBalanceText" Text="Баланс: 0.00 руб." Foreground="#66c0f4" FontSize="12" Margin="0,0,0,10"/>
                         <Separator Background="#3e434a" Margin="0,5"/>
                         <Button Content="Об аккаунте" Foreground="LightGray" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
-                        <Button Content="Настройки" Foreground="LightGray" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
+
+                        <Button Content="Редактировать профиль" Click="EditProfile_Click" Foreground="LightGray" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
+
                         <Separator Background="#3e434a" Margin="0,5"/>
                         <Button Content="Выйти из аккаунта" Click="Logout_Click" Foreground="#e81123" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
                     </StackPanel>
