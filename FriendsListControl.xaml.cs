@@ -11,6 +11,10 @@ namespace SteamLamp
         public FriendsListControl()
         {
             InitializeComponent();
+            if (Session.CurrentUser != null)
+            {
+                FriendsNickName.Text = Session.CurrentUser.Nickname;
+            }
         }
         private void BtnShowFriends_Click(object sender, RoutedEventArgs e)
         {
@@ -50,17 +54,26 @@ namespace SteamLamp
         {
             Border card = new Border
             {
-                Background = new SolidColorBrush(Color.FromRgb(30, 35, 43)),
+                Background = new SolidColorBrush(Color.FromRgb(22, 32, 45)),
                 Padding = new Thickness(10),
-                Margin = new Thickness(0, 0, 0, 5),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(42, 46, 51)),
-                BorderThickness = new Thickness(1)
+                Margin = new Thickness(0, 0, 0, 6),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(35, 43, 54)),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(3)
             };
             Grid grid = new Grid();
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(40) }); // Аватар
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // Ник
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Кнопка
-            Border ava = new Border { Background = new SolidColorBrush(Color.FromRgb(102, 192, 244)), Width = 40, Height = 40 };
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(45) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            Border ava = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(48, 56, 67)),
+                Width = 40,
+                Height = 40,
+                CornerRadius = new CornerRadius(2),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
+                BorderThickness = new Thickness(1)
+            };
             TextBlock txt = new TextBlock
             {
                 Text = nickname,
@@ -68,28 +81,74 @@ namespace SteamLamp
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(15, 0, 0, 0),
                 FontSize = 14,
-                FontWeight = FontWeights.Bold
+                FontWeight = FontWeights.SemiBold
             };
             grid.Children.Add(ava);
             grid.Children.Add(txt);
             Grid.SetColumn(txt, 1);
             if (isNew)
             {
-                Button addBtn = new Button
+                if (Session.CurrentUser != null && id == Session.CurrentUser.Id)
                 {
-                    Content = "Добавить",
-                    Width = 90,
-                    Height = 25,
-                    Background = new SolidColorBrush(Color.FromRgb(103, 160, 19)),
-                    Foreground = Brushes.White,
-                    BorderThickness = new Thickness(0),
-                    Cursor = Cursors.Hand,
-                    Margin = new Thickness(10, 0, 0, 0)
+                    TextBlock itsYou = new TextBlock
+                    {
+                        Text = "ЭТО ВЫ",
+                        Foreground = Brushes.Gray,
+                        FontSize = 10,
+                        FontWeight = FontWeights.Bold,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(0, 0, 10, 0)
+                    };
+                    grid.Children.Add(itsYou);
+                    Grid.SetColumn(itsYou, 2);
+                }
+                else
+                {
+                    Button addBtn = new Button
+                    {
+                        Content = "Добавить",
+                        Width = 90,
+                        Height = 26,
+                        Background = new SolidColorBrush(Color.FromRgb(103, 160, 19)),
+                        Foreground = Brushes.White,
+                        FontSize = 11,
+                        FontWeight = FontWeights.Bold,
+                        BorderThickness = new Thickness(0),
+                        Cursor = Cursors.Hand
+                    };
+                    addBtn.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(2)) } });
+                    addBtn.Click += (s, e) => AddToFriendsInDB(id, nickname);
+                    grid.Children.Add(addBtn);
+                    Grid.SetColumn(addBtn, 2);
+                }
+            }
+            else
+            {
+                StackPanel friendActions = new StackPanel { Orientation = Orientation.Horizontal };
+                TextBlock statusTxt = new TextBlock
+                {
+                    Text = "В сети",
+                    Foreground = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
+                    FontSize = 11,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(0, 0, 15, 0)
                 };
-                addBtn.Click += (s, e) => AddToFriendsInDB(id, nickname);
-
-                grid.Children.Add(addBtn);
-                Grid.SetColumn(addBtn, 2);
+                Button msgBtn = new Button
+                {
+                    Content = "Сообщение",
+                    Width = 90,
+                    Height = 26,
+                    Background = new SolidColorBrush(Color.FromRgb(48, 56, 67)),
+                    Foreground = Brushes.White,
+                    FontSize = 11,
+                    BorderThickness = new Thickness(0),
+                    Cursor = Cursors.Hand
+                };
+                msgBtn.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(2)) } });
+                friendActions.Children.Add(statusTxt);
+                friendActions.Children.Add(msgBtn);
+                grid.Children.Add(friendActions);
+                Grid.SetColumn(friendActions, 2);
             }
             card.Child = grid;
             FriendsContainer.Children.Add(card);
