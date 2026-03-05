@@ -33,8 +33,12 @@ namespace SteamLamp
         {
             CartItemsControl.ItemsSource = null;
             CartItemsControl.ItemsSource = _items;
-            double total = _items.Sum(i => { string p = i.Price.Replace("руб.", "").Replace(" ", "").Trim(); return double.TryParse(p, out double res) ? res : 0; });
+            double total = _items.Sum(i => { if (string.IsNullOrWhiteSpace(i.Price)) return 0;
+            string p = i.Price.ToLower().Replace("руб.","").Replace(".","").Replace(" ","").Trim();
+                return double.TryParse(p, out double res) ? res : 0;
+            });
             TotalAmountText.Text = $"{total:N2} руб.";
+            _main.CartCountText.Text = _items.Count.ToString();
         }
         private void RemoveItem_Click(object sender, RoutedEventArgs e) 
         {

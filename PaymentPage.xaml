@@ -4,8 +4,27 @@
              Background="#1b2838">
     <UserControl.Resources>
         <Style x:Key="BuyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#67bc19"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#82d22a"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
+
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Border Background="#16202d" Padding="40" Width="500" CornerRadius="5">
             <StackPanel>
@@ -20,9 +39,28 @@
 
                 <TextBlock x:Name="FinalTotalText" Text="К оплате: 0 руб." Foreground="White" Margin="0,20,0,5" FontSize="16" HorizontalAlignment="Right"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                    <Button Content="Отмена" Background="Transparent" Foreground="Gray" BorderThickness="0" Margin="0,0,20,0" Click="Cancel_Click"/>
-                    <Button Content="ПОДТВЕРДИТЬ И ОПЛАТИТЬ" Style="{StaticResource BuyButtonStyle}" Padding="20,10" Click="ConfirmPayment_Click"/>
+                <StackPanel x:Name="ProcessingPanel" Visibility="Collapsed" Margin="0,20,0,0">
+                    <TextBlock x:Name="StatusText" Text="Обработка платежа..." 
+                               Foreground="#66c0f4" Margin="0,0,0,10" 
+                               HorizontalAlignment="Center" FontSize="14"/>
+                    <ProgressBar x:Name="PaymentProgressBar" Height="12" 
+                                 Background="#16202d" Foreground="#66c0f4" 
+                                 BorderThickness="0"/>
+                </StackPanel>
+
+                <StackPanel x:Name="ButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                    <Button Content="Отмена" 
+                            Background="Transparent" 
+                            Foreground="Gray" 
+                            BorderThickness="0" 
+                            Margin="0,0,20,0" 
+                            Cursor="Hand"
+                            Click="Cancel_Click"/>
+
+                    <Button Content="ПОДТВЕРДИТЬ И ОПЛАТИТЬ" 
+                            Style="{StaticResource BuyButtonStyle}" 
+                            Cursor="Hand"
+                            Click="ConfirmPayment_Click" Width="214" Height="31"/>
                 </StackPanel>
             </StackPanel>
         </Border>

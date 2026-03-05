@@ -69,21 +69,29 @@ namespace SteamLamp
                     gameToAdd = db.Games.FirstOrDefault(g => g.Title == title);
                 }
             }
-            if (gameToAdd != null && !_cartList.Any(g => g.Title == gameToAdd.Title)) 
+            if (gameToAdd != null) 
             {
-                _cartList.Add(gameToAdd);
-                CartCountText.Text = _cartItems.Count.ToString();
-                UpdateCartUI();
-                var blueBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
-                var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
-
-                BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
-                var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-                timer.Tick += (s, args) => {
-                    BtnCart.Background = defaultBrush;
-                    timer.Stop();
-                };
-                timer.Start();
+                if (gameToAdd.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase)) 
+                {
+                    MessageBox.Show($"{gameToAdd.Title} успешно добавлена в вашу библиотеку!");
+                    OpenLibrary_Click(null, null);
+                    return;
+                }
+                if (!_cartList.Any(g => g.Title == gameToAdd.Title)) 
+                {
+                    _cartList.Add(gameToAdd);
+                    UpdateCartUI();
+                    var blueBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
+                    var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
+                    BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
+                    var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+                    timer.Tick += (s, args) => {
+                        BtnCart.Background = defaultBrush;
+                        timer.Stop();
+                    };
+                    timer.Start();
+                }
+                         
             }
         }
         private void UpdateCartUI() 
@@ -119,6 +127,7 @@ namespace SteamLamp
             ShowcaseName.Text = currentGame.Title;
             ShowcasePrice.Text = currentGame.Price;
             ShowcaseGameTitle.Text = currentGame.Title;
+            ShowcaseBuyBtn.DataContext = currentGame;
 
             if (PageIndicators != null)
             {
@@ -147,7 +156,7 @@ namespace SteamLamp
             LoadGamesFromDB();
         }
 
-        private void OpenLibrary_Click(object sender, RoutedEventArgs e)
+        public void OpenLibrary_Click(object sender, RoutedEventArgs e)
         {
             MainContentFrame.Content = new LibraryPage();
             UpdateMenuHighlight(BtnLibrary);
@@ -253,7 +262,7 @@ namespace SteamLamp
         public void ClearCart() 
         {
             _cartList.Clear();
-            CartCountText.Text = "0";
+            UpdateCartUI();
         }
     }
     public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter 

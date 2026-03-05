@@ -207,7 +207,7 @@
                                                     <TextBlock Text="ЛИДЕР ПРОДАЖ" Foreground="White" FontSize="10"/>
                                                 </Border>
                                                 <TextBlock x:Name="ShowcasePrice" Text="1999 руб." Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,40,0,10"/>
-                                                <Button Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" HorizontalAlignment="Left" Width="83" Height="26"/>
+                                                <Button x:Name="ShowcaseBuyBtn" Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" HorizontalAlignment="Left" Width="83" Height="26"/>
                                             </StackPanel>
                                         </Grid>
                                     </Border>
