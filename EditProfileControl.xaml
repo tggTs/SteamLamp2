@@ -8,21 +8,27 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#2a2e33"/>
             <Setter Property="Padding" Value="8"/>
+            <Setter Property="CaretBrush" Value="White"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border Background="{TemplateBinding Background}" 
                                     BorderBrush="{TemplateBinding BorderBrush}" 
-                                    BorderThickness="{TemplateBinding BorderThickness}"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="2"/>
+
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Margin="8,0,8,0"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
                             <TextBlock Text="{TemplateBinding Tag}" 
                                        Foreground="#4f535b" 
                                        IsHitTestVisible="False"
-                                       Margin="13,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Visibility="Collapsed" 
-                                       x:Name="Watermark"/>
+                                       Margin="12,0,0,0"
+                                       x:Name="Watermark"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Text" Value="">
@@ -51,14 +57,24 @@
 
                 <TextBlock Text="ИЗМЕНЕНИЕ НИКНЕЙМА" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,10,0,5"/>
                 <TextBox x:Name="EditNickname" Style="{StaticResource SteamTextBox}" 
-                         Tag="Введите новый никнейм" FontSize="14" TextChanged="Field_TextChanged"/>
+                         Tag="Введите новый никнейм" FontSize="14" TextChanged="Field_TextChanged" 
+                         Height="35" VerticalContentAlignment="Center"/>
 
                 <TextBlock Text="ОПИСАНИЕ" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,20,0,5"/>
                 <TextBox x:Name="EditBio" Style="{StaticResource SteamTextBox}" 
-                         Tag="Добавьте описание профиля" Height="100" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="Field_TextChanged"/>
+                         Tag="Добавьте описание профиля" Height="120" 
+                         TextWrapping="Wrap" AcceptsReturn="True" 
+                         VerticalContentAlignment="Top" Padding="8,10,8,10"
+                         TextChanged="Field_TextChanged"/>
 
                 <Button x:Name="SaveBtn" Content="Сохранить изменения" Margin="0,30,0,0" Height="40" 
-                        Background="#3d4450" Foreground="#898989" IsEnabled="False" BorderThickness="0" Click="SaveBtn_Click" Cursor="Hand"/>
+                        Background="#3d4450" Foreground="#898989" IsEnabled="False" BorderThickness="0" Click="SaveBtn_Click" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="2"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </StackPanel>
         </Border>
 

@@ -147,7 +147,7 @@ namespace SteamLamp
             }
             catch
             {
-                _main.OpenLibrary_Click(null, null);
+                _main.OpenStore_Click(null, null);
             }
         }
     }

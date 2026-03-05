@@ -17,5 +17,10 @@ namespace SteamLamp
                 main.OpenStore_Click(null, null);
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

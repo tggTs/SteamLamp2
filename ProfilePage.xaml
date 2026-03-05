@@ -26,7 +26,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Grid.Column="0" Width="124" Height="124" BorderBrush="#66c0f4" BorderThickness="2">
-                            <Grid Background="#212c3d">
+                            <Grid x:Name="ProfileAvatarBrush" Background="#212c3d">
                                 <TextBlock Text="AVA" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
@@ -34,7 +34,15 @@
                         <StackPanel Grid.Column="1" Margin="20,5,0,0">
                             <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="26" Foreground="White" FontWeight="Bold"/>
                             <TextBlock Text="В сети" Foreground="#66c0f4" FontSize="13" Margin="0,2"/>
-                            <TextBlock Text="Описание профиля" Foreground="#898989" FontSize="12" Margin="0,10,0,0"/>
+
+                            <TextBlock x:Name="ProfileBio" 
+                                       Text="Здесь будет ваше описание..." 
+                                       Foreground="#898989" 
+                                       FontSize="12" 
+                                       Margin="0,10,0,0" 
+                                       TextWrapping="Wrap" 
+                                       MaxWidth="500"
+                                       HorizontalAlignment="Left"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -44,7 +52,13 @@
                                     <TextBlock Text="10" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <Button Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand" Click="Button_Click"/>
+                            <Button Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand" Click="Button_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="2"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -73,10 +87,8 @@
                                     <TextBlock Text="ДРУЗЬЯ" Foreground="White" FontSize="12" FontWeight="Bold"/>
                                     <Button Content="Все" HorizontalAlignment="Right" Foreground="#66c0f4" Background="Transparent" BorderThickness="0" Click="OpenFriends_Click" Cursor="Hand"/>
                                 </Grid>
-
                                 <StackPanel x:Name="FriendsPreviewContainer">
                                 </StackPanel>
-
                             </StackPanel>
                         </Border>
                     </StackPanel>

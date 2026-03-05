@@ -12,13 +12,13 @@ using System.Linq;
 
 namespace SteamLamp
 {
-    
     public partial class MainWindow : Window
     {
         private List<Game> _cartList = new List<Game>();
         private List<Game> _showcaseGames;
         private int _currentPage = 0;
         private HashSet<string> _cartItems = new HashSet<string>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,9 +30,9 @@ namespace SteamLamp
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
             }
             UpdateMenuHighlight(BtnStore);
-
         }
-        private void LoadGamesFromDB() 
+
+        private void LoadGamesFromDB()
         {
             try
             {
@@ -50,10 +50,8 @@ namespace SteamLamp
             }
             catch (Exception error)
             {
-
                 MessageBox.Show("Ошибка загрузки Базы: " + error.Message);
             }
-           
         }
 
         public void AddToCart_Click(object sender, RoutedEventArgs e)
@@ -61,23 +59,23 @@ namespace SteamLamp
             e.Handled = true;
             var btn = sender as Button;
             Game gameToAdd = btn.DataContext as Game;
-            if (gameToAdd ==null) 
+            if (gameToAdd == null)
             {
                 string title = btn.Tag?.ToString() ?? ModalGameTitle.Text;
-                using (var db = new AppDbContext()) 
+                using (var db = new AppDbContext())
                 {
                     gameToAdd = db.Games.FirstOrDefault(g => g.Title == title);
                 }
             }
-            if (gameToAdd != null) 
+            if (gameToAdd != null)
             {
-                if (gameToAdd.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase)) 
+                if (gameToAdd.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show($"{gameToAdd.Title} успешно добавлена в вашу библиотеку!");
                     OpenLibrary_Click(null, null);
                     return;
                 }
-                if (!_cartList.Any(g => g.Title == gameToAdd.Title)) 
+                if (!_cartList.Any(g => g.Title == gameToAdd.Title))
                 {
                     _cartList.Add(gameToAdd);
                     UpdateCartUI();
@@ -85,23 +83,41 @@ namespace SteamLamp
                     var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
                     BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
                     var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-                    timer.Tick += (s, args) => {
+                    timer.Tick += (s, args) =>
+                    {
                         BtnCart.Background = defaultBrush;
                         timer.Stop();
                     };
                     timer.Start();
                 }
-                         
+
+                if (gameToAdd != null && !_cartList.Any(g => g.Title == gameToAdd.Title))
+                {
+                    _cartList.Add(gameToAdd);
+                    UpdateCartUI();
+
+                    var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
+                    BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
+                    var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+                    timer.Tick += (s, args) =>
+                    {
+                        BtnCart.Background = defaultBrush;
+                        timer.Stop();
+                    };
+                    timer.Start();
+
+                }
             }
         }
-        private void UpdateCartUI() 
+
+        private void UpdateCartUI()
         {
             CartCountText.Text = _cartList.Count.ToString();
         }
 
         public void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            if (_showcaseGames != null && _currentPage < _showcaseGames.Count-1)
+            if (_showcaseGames != null && _currentPage < _showcaseGames.Count - 1)
             {
                 _currentPage++;
                 UpdateShowcase();
@@ -119,10 +135,8 @@ namespace SteamLamp
 
         public void UpdateShowcase()
         {
-            if (_showcaseGames ==null || !_showcaseGames.Any())
-            {
-                return;
-            }
+            if (_showcaseGames == null || !_showcaseGames.Any()) return;
+
             var currentGame = _showcaseGames[_currentPage];
             ShowcaseName.Text = currentGame.Title;
             ShowcasePrice.Text = currentGame.Price;
@@ -146,7 +160,7 @@ namespace SteamLamp
             BtnStore.Tag = null;
             BtnLibrary.Tag = null;
             BtnProfile.Tag = null;
-            selectedButton.Tag = "Selected";
+            if (selectedButton != null) selectedButton.Tag = "Selected";
         }
 
         public void OpenStore_Click(object sender, RoutedEventArgs e)
@@ -168,6 +182,17 @@ namespace SteamLamp
             MainContentFrame.Content = profilePage;
             UpdateMenuHighlight(BtnProfile);
         }
+        private void EditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            AccountPopup.IsOpen = false;
+            ProfilePage profilePage = new ProfilePage();
+            MainContentFrame.Content = profilePage;
+            UpdateMenuHighlight(BtnProfile);
+            EditProfileControl editControl = new EditProfileControl();
+            profilePage.FriendsOverlay.Content = editControl;
+            profilePage.MainProfileLayout.Visibility = Visibility.Collapsed;
+            profilePage.FriendsOverlay.Visibility = Visibility.Visible;
+        }
 
         private void Header_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -180,34 +205,12 @@ namespace SteamLamp
 
         private void MaximizeApp_Click(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == WindowState.Maximized)
-            {
-
-                this.WindowState = WindowState.Normal;
-
-            }
-            else
-            {
-
-                this.WindowState = WindowState.Maximized;
-
-            }
+            this.WindowState = (this.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized;
         }
 
         private void AccountMenuButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountPopup.IsOpen == true)
-            {
-
-                AccountPopup.IsOpen = false;
-
-            }
-            else
-            {
-
-                AccountPopup.IsOpen = true;
-
-            }
+            AccountPopup.IsOpen = !AccountPopup.IsOpen;
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -220,7 +223,8 @@ namespace SteamLamp
             authWindow.Show();
             this.Close();
         }
-        private void GameCard_Click(object sender, RoutedEventArgs e) 
+
+        private void GameCard_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var game = btn.Tag as Game;
@@ -230,42 +234,32 @@ namespace SteamLamp
                 ModalGameDesc.Text = game.Description;
                 ModalGamePrice.Text = game.Price;
                 ModalBuyBtn.Tag = game.Title;
-                if (game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
-                {
-                    ModalBuyBtn.Content = "Добавить в Библиотеку";
-                }
-                else 
-                {
-                    ModalBuyBtn.Content = "В корзину";
-                }
-                    GameDetailsOverlay.Visibility = Visibility.Visible;
+                ModalBuyBtn.Content = game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase)
+                    ? "Добавить в Библиотеку" : "В корзину";
+
+                GameDetailsOverlay.Visibility = Visibility.Visible;
             }
         }
-        private void CloseOverlay_Click(object sender, RoutedEventArgs e) 
+
+        private void CloseOverlay_Click(object sender, RoutedEventArgs e)
         {
             GameDetailsOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void BtnCart_Click(object sender, RoutedEventArgs e)
-        {
-            var cartPage = new CartPage(_cartList, this);
-            MainContentFrame.Content = cartPage;
         }
 
         public void OpenCart_Click(object sender, RoutedEventArgs e)
         {
             MainContentFrame.Content = new CartPage(_cartList, this);
-            BtnStore.Tag = null;
-            BtnLibrary.Tag = null;
-            BtnProfile.Tag = null;
+            UpdateMenuHighlight(null);
         }
-        public void ClearCart() 
+
+        public void ClearCart()
         {
             _cartList.Clear();
             UpdateCartUI();
         }
     }
-    public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter 
+
+    public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -282,5 +276,4 @@ namespace SteamLamp
             throw new NotImplementedException();
         }
     }
-
 }

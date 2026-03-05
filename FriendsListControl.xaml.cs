@@ -11,11 +11,18 @@ namespace SteamLamp
         public FriendsListControl()
         {
             InitializeComponent();
+
+            // Загружаем данные сразу при создании компонента
             if (Session.CurrentUser != null)
             {
                 FriendsNickName.Text = Session.CurrentUser.Nickname;
+                LoadMyFriends();
+
+                // Визуально подсвечиваем кнопку "Друзья" по умолчанию
+                BtnShowFriends.Background = new SolidColorBrush(Color.FromRgb(61, 68, 80));
             }
         }
+
         private void BtnShowFriends_Click(object sender, RoutedEventArgs e)
         {
             TabTitle.Text = "ВСЕ ДРУЗЬЯ";
@@ -26,9 +33,11 @@ namespace SteamLamp
             {
                 LoadMyFriends();
             }
+
             BtnShowFriends.Background = new SolidColorBrush(Color.FromRgb(61, 68, 80));
             BtnAddFriends.Background = Brushes.Transparent;
         }
+
         private void LoadMyFriends()
         {
             using (var db = new AppDbContext())
@@ -41,6 +50,7 @@ namespace SteamLamp
                 }
             }
         }
+
         private void OpenAddFriendTab_Click(object sender, RoutedEventArgs e)
         {
             TabTitle.Text = "ДОБАВИТЬ В ДРУЗЬЯ";
@@ -50,6 +60,7 @@ namespace SteamLamp
             BtnAddFriends.Background = new SolidColorBrush(Color.FromRgb(61, 68, 80));
             BtnShowFriends.Background = Brushes.Transparent;
         }
+
         private void CreateFriendCard(int id, string nickname, bool isNew)
         {
             Border card = new Border
@@ -61,6 +72,7 @@ namespace SteamLamp
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(3)
             };
+
             Grid grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(45) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -83,9 +95,11 @@ namespace SteamLamp
                 FontSize = 14,
                 FontWeight = FontWeights.SemiBold
             };
+
             grid.Children.Add(ava);
             grid.Children.Add(txt);
             Grid.SetColumn(txt, 1);
+
             if (isNew)
             {
                 if (Session.CurrentUser != null && id == Session.CurrentUser.Id)
@@ -124,38 +138,27 @@ namespace SteamLamp
             }
             else
             {
-                StackPanel friendActions = new StackPanel { Orientation = Orientation.Horizontal };
                 TextBlock statusTxt = new TextBlock
                 {
                     Text = "В сети",
                     Foreground = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
                     FontSize = 11,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(0, 0, 15, 0)
+                    Margin = new Thickness(0, 0, 10, 0)
                 };
-                Button msgBtn = new Button
-                {
-                    Content = "Сообщение",
-                    Width = 90,
-                    Height = 26,
-                    Background = new SolidColorBrush(Color.FromRgb(48, 56, 67)),
-                    Foreground = Brushes.White,
-                    FontSize = 11,
-                    BorderThickness = new Thickness(0),
-                    Cursor = Cursors.Hand
-                };
-                msgBtn.Resources.Add(typeof(Border), new Style(typeof(Border)) { Setters = { new Setter(Border.CornerRadiusProperty, new CornerRadius(2)) } });
-                friendActions.Children.Add(statusTxt);
-                friendActions.Children.Add(msgBtn);
-                grid.Children.Add(friendActions);
-                Grid.SetColumn(friendActions, 2);
+                grid.Children.Add(statusTxt);
+                Grid.SetColumn(statusTxt, 2);
             }
+
             card.Child = grid;
             FriendsContainer.Children.Add(card);
         }
+
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
-            string searchName = FriendSearchBox.Text;
+            string searchName = FriendSearchBox.Text.Trim();
+            if (string.IsNullOrEmpty(searchName) || searchName == "Введите никнейм друга для поиска") return;
+
             FriendsContainer.Children.Clear();
 
             using (var db = new AppDbContext())
@@ -171,6 +174,7 @@ namespace SteamLamp
                 }
             }
         }
+
         private void FriendSearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (FriendSearchBox.Text == "Введите никнейм друга для поиска")
@@ -178,6 +182,7 @@ namespace SteamLamp
                 FriendSearchBox.Text = "";
             }
         }
+
         private void BackToProfile_Click(object sender, RoutedEventArgs e)
         {
             DependencyObject parent = VisualTreeHelper.GetParent(this);
@@ -191,10 +196,12 @@ namespace SteamLamp
                 profilePage.MainProfileLayout.Visibility = Visibility.Visible;
             }
         }
+
         private void AddToFriendsInDB(int friendId, string friendNickname)
         {
             if (Session.CurrentUser == null) return;
             int myId = Session.CurrentUser.Id;
+
             using (var db = new AppDbContext())
             {
                 if (myId == friendId)
@@ -203,7 +210,6 @@ namespace SteamLamp
                     return;
                 }
                 bool alreadyFriends = db.Friends.Any(f => f.UserId == myId && f.FriendId == friendId);
-
                 if (!alreadyFriends)
                 {
                     var newFriendLink = new Friend
@@ -212,12 +218,13 @@ namespace SteamLamp
                         FriendId = friendId,
                         FriendNickname = friendNickname
                     };
-
                     db.Friends.Add(newFriendLink);
                     db.SaveChanges();
-
                     MessageBox.Show($"{friendNickname} теперь в вашем списке друзей!");
                     FriendsContainer.Children.Clear();
+                    LoadMyFriends();
+                    TabTitle.Text = "ВСЕ ДРУЗЬЯ";
+                    SearchArea.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
