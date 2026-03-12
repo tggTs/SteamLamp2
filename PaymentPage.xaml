@@ -24,7 +24,6 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-
     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Border Background="#16202d" Padding="40" Width="500" CornerRadius="5">
             <StackPanel>
@@ -47,20 +46,10 @@
                                  Background="#16202d" Foreground="#66c0f4" 
                                  BorderThickness="0"/>
                 </StackPanel>
-
                 <StackPanel x:Name="ButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                    <Button Content="Отмена" 
-                            Background="Transparent" 
-                            Foreground="Gray" 
-                            BorderThickness="0" 
-                            Margin="0,0,20,0" 
-                            Cursor="Hand"
-                            Click="Cancel_Click"/>
+                    <Button Content="Отмена" Background="Transparent" Foreground="Gray" BorderThickness="0" Margin="0,0,20,0" Cursor="Hand" Click="Cancel_Click"/>
 
-                    <Button Content="ПОДТВЕРДИТЬ И ОПЛАТИТЬ" 
-                            Style="{StaticResource BuyButtonStyle}" 
-                            Cursor="Hand"
-                            Click="ConfirmPayment_Click" Width="214" Height="31"/>
+                    <Button Content="ПОДТВЕРДИТЬ И ОПЛАТИТЬ" Style="{StaticResource BuyButtonStyle}" Cursor="Hand" Click="ConfirmPayment_Click" Width="214" Height="31"/>
                 </StackPanel>
             </StackPanel>
         </Border>

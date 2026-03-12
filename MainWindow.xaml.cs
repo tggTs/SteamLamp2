@@ -234,9 +234,7 @@ namespace SteamLamp
                 ModalGameDesc.Text = game.Description;
                 ModalGamePrice.Text = game.Price;
                 ModalBuyBtn.Tag = game.Title;
-                ModalBuyBtn.Content = game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase)
-                    ? "Добавить в Библиотеку" : "В корзину";
-
+                ModalBuyBtn.Content = game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase) ? "Добавить в Библиотеку" : "В корзину";
                 GameDetailsOverlay.Visibility = Visibility.Visible;
             }
         }
@@ -266,9 +264,9 @@ namespace SteamLamp
             string price = value as string;
             if (price != null && price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
             {
-                return "В БИБЛИОТЕКУ";
+                return "В библиотеку";
             }
-            return "В КОРЗИНУ";
+            return "В корзину";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
