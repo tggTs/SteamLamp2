@@ -59,29 +59,35 @@ namespace SteamLamp
         {
             if (Session.CurrentUser == null) return;
             FriendsPreviewContainer.Children.Clear();
-
             using (var db = new AppDbContext())
             {
                 int myId = Session.CurrentUser.Id;
-                var myFriends = db.Friends
-                                  .Where(f => f.UserId == myId)
-                                  .Take(5)
-                                  .ToList();
+                var myFriends = (from f in db.Friends
+                                 join u in db.Users on f.FriendId equals u.Id
+                                 where f.UserId == myId
+                                 select new { u.Nickname, u.Avatar }).Take(5).ToList();
 
                 foreach (var friend in myFriends)
                 {
                     Grid fGrid = new Grid { Margin = new Thickness(0, 0, 0, 8) };
+                    Image friendImg = new Image { Stretch = Stretch.UniformToFill };
+                    if (friend.Avatar != null) friendImg.Source = BytesToImage(friend.Avatar);
+
                     fGrid.Children.Add(new Border
                     {
                         Width = 30,
                         Height = 30,
-                        Background = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
+                        Background = new SolidColorBrush(Color.FromRgb(48, 56, 67)),
                         HorizontalAlignment = HorizontalAlignment.Left,
-                        CornerRadius = new CornerRadius(2)
+                        CornerRadius = new CornerRadius(2),
+                        Child = friendImg,
+                        ClipToBounds = true,
+                        BorderBrush = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
+                        BorderThickness = new Thickness(1)
                     });
                     fGrid.Children.Add(new TextBlock
                     {
-                        Text = friend.FriendNickname,
+                        Text = friend.Nickname,
                         Foreground = new SolidColorBrush(Color.FromRgb(102, 192, 244)),
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(40, 0, 0, 0),

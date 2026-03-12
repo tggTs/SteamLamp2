@@ -3,8 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SteamLamp"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="#2a2e33"/>
+            <Setter Property="BorderBrush" Value="#3d4450"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="0"/>
+            <Style.Resources>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Foreground" Value="#c6d4df"/>
+                    <Setter Property="Padding" Value="10,8"/>
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="MenuItem">
+                                <Border x:Name="Bg" Background="{TemplateBinding Background}" BorderThickness="0">
+                                    <ContentPresenter ContentSource="Header" Margin="{TemplateBinding Padding}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bg" Property="Background" Value="#3d4450"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="SteamOptionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#54a5d4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3d4450"/>
+                                <Setter Property="Foreground" Value="#66c0f4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
     <Border Background="#1b2838" BorderBrush="#2a2e33" BorderThickness="1" CornerRadius="4">
         <Grid>
@@ -21,8 +73,12 @@
                             <ColumnDefinition Width="45"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+
                         <Border Width="40" Height="40" Background="#3d4450" BorderBrush="#66c0f4" BorderThickness="2" CornerRadius="2">
-                            <Rectangle Fill="#66c0f4" Margin="2"/>
+                            <Grid>
+                                <TextBlock Text="AVA" Foreground="#66c0f4" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image x:Name="UserSelfAvatar" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </Grid>
                         </Border>
 
                         <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
