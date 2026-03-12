@@ -39,6 +39,28 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="AvatarSelectionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" BorderBrush="Transparent" BorderThickness="2" CornerRadius="4">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#66c0f4"/>
+                                <Setter TargetName="border" Property="Background" Value="#2a2e33"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -51,9 +73,11 @@
                     <Button x:Name="BtnOpenAvatarStore" Content="Выберите аватар" Width="150" Height="32" HorizontalAlignment="Left" 
                             Background="#3d4450" Foreground="White" BorderThickness="0" Click="BtnOpenAvatarStore_Click" Cursor="Hand"/>
 
-                    <Border x:Name="CurrentAvatarPreview" Width="40" Height="40" HorizontalAlignment="Right" Background="#66c0f4" BorderBrush="#66c0f4" BorderThickness="1"/>
+                    <Border x:Name="CurrentAvatarPreviewBorder" Width="40" Height="40" HorizontalAlignment="Right" BorderBrush="#66c0f4" BorderThickness="1">
+                        <Image x:Name="CurrentAvatarPreviewImage" Stretch="UniformToFill"/>
+                    </Border>
                 </Grid>
-                <TextBlock Text="Выберите аватарку из нескольких предложенных" Foreground="#4f535b" FontSize="10" Margin="0,0,0,20"/>
+                <TextBlock Text="Выберите аватарку из 6 предложенных вариантов" Foreground="#4f535b" FontSize="10" Margin="0,0,0,20"/>
 
                 <TextBlock Text="ИЗМЕНЕНИЕ НИКНЕЙМА" Foreground="#898989" FontSize="11" FontWeight="Bold" Margin="0,10,0,5"/>
                 <TextBox x:Name="EditNickname" Style="{StaticResource SteamTextBox}" 
@@ -80,30 +104,31 @@
 
         <Border x:Name="AvatarPickerOverlay" Background="#1b2838" Visibility="Collapsed" Padding="30">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Выберите аватарку из уже присутствующих" Foreground="White" FontSize="16" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                <TextBlock Text="ВЫБЕРИТЕ ПЕРСОНАЖА" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+                <TextBlock Text="Ваш выбор будет виден всем пользователям SteamLamp" Foreground="#898989" FontSize="12" Margin="0,0,0,30" HorizontalAlignment="Center"/>
 
-                <UniformGrid Columns="3" Width="240">
-                    <Button Tag="#66c0f4" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#66c0f4"/>
+                <UniformGrid Columns="3" Width="360">
+                    <Button Tag="ava1.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava1.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
-                    <Button Tag="#57cbde" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#57cbde"/>
+                    <Button Tag="ava2.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava2.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
-                    <Button Tag="#d9ab26" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#d9ab26"/>
+                    <Button Tag="ava3.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava3.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
-                    <Button Tag="#ff4b4b" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#ff4b4b"/>
+                    <Button Tag="ava4.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava4.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
-                    <Button Tag="#ae4bff" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#ae4bff"/>
+                    <Button Tag="ava5.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava5.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
-                    <Button Tag="#4fff4b" Click="AvatarSelect_Click" Margin="5" Background="Transparent" BorderThickness="0">
-                        <Border Width="60" Height="60" Background="#4fff4b"/>
+                    <Button Tag="ava6.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
+                        <Image Source="pack://application:,,,/Assets/ava6.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                 </UniformGrid>
 
-                <Button Content="Назад" Margin="0,30,0,0" Width="100" Height="30" Background="#3d4450" Foreground="White" BorderThickness="0" Click="CloseAvatarPicker_Click" Cursor="Hand"/>
+                <Button Content="ОТМЕНА" Margin="0,40,0,0" Width="120" Height="35" Background="#3d4450" Foreground="White" BorderThickness="0" Click="CloseAvatarPicker_Click" Cursor="Hand"/>
             </StackPanel>
         </Border>
     </Grid>
