@@ -170,8 +170,57 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" Tag="Поиск по названию..."/>
-
+                                    <Grid x:Name="SearchContainer">
+                                        <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" Tag="Поиск по названию..." TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus"/>
+                                        <Popup x:Name="SearchPopup" 
+                                           PlacementTarget="{Binding ElementName=SearchBox}" 
+                                           Placement="Bottom" 
+                                           AllowsTransparency="True" 
+                                           StaysOpen="False">
+                                            <Border Background="#2a2e33" BorderBrush="#3d4450" BorderThickness="1" Width="300">
+                                                <ListBox x:Name="SearchResultsList" 
+                                                     Background="Transparent" 
+                                                     BorderThickness="0"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     SelectionChanged="SearchResultsList_SelectionChanged">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Margin="5">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="50"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Border Background="#1b2838" Height="30" Width="45" CornerRadius="2"/>
+                                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                                    <TextBlock Text="{Binding Title}" Foreground="White" FontSize="13" FontWeight="Bold"/>
+                                                                    <TextBlock Text="{Binding Price}" Foreground="#66c0f4" FontSize="11"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                    <ListBox.ItemContainerStyle>
+                                                        <Style TargetType="ListBoxItem">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                                        <Border Background="{TemplateBinding Background}" Padding="2">
+                                                                            <ContentPresenter />
+                                                                        </Border>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="#3e434a"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ListBox.ItemContainerStyle>
+                                                </ListBox>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Button x:Name="BtnCart" Click="OpenCart_Click" Content="🛒 КОРЗИНА" Foreground="White" Background="#3d4450" Padding="10,5" BorderThickness="0" Cursor="Hand" />
                                         <Border Background="#66c0f4" CornerRadius="2" Margin="5,0,0,0" Padding="5,2">
@@ -201,12 +250,12 @@
                                                 <TextBlock x:Name="ShowcaseGameTitle" Text="CyberLamp 2026" Foreground="#3d4450" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                             <StackPanel Grid.Column="1" Margin="10,20">
-                                                <TextBlock x:Name="ShowcaseName" Text="CyberLamp 2026" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                                                <TextBlock x:Name="ShowcaseName" Text="GameName" Foreground="White" FontSize="22" FontWeight="Bold"/>
                                                 <TextBlock Text="От создателей LampSoft" Foreground="#898989" FontSize="12" Margin="0,5"/>
                                                 <Border Background="#3d4450" HorizontalAlignment="Left" Padding="5,2" Margin="0,15">
                                                     <TextBlock Text="ЛИДЕР ПРОДАЖ" Foreground="White" FontSize="10"/>
                                                 </Border>
-                                                <TextBlock x:Name="ShowcasePrice" Text="1999 руб." Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,40,0,10"/>
+                                                <TextBlock x:Name="ShowcasePrice" Text="0 руб." Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,40,0,10"/>
                                                 <Button x:Name="ShowcaseBuyBtn" Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" HorizontalAlignment="Left" Width="292" Height="37"/>
                                             </StackPanel>
                                         </Grid>
@@ -301,7 +350,9 @@
                    VerticalOffset="5">
                 <Border Background="#2a2e33" BorderBrush="#1b2838" BorderThickness="1" Width="180" CornerRadius="5">
                     <StackPanel Margin="10">
-                        <TextBlock x:Name="UserBalanceText" Text="Баланс: 0.00 руб." Foreground="#66c0f4" FontSize="12" Margin="0,0,0,10"/>
+                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Click="OpenWallet_Click" HorizontalContentAlignment="Left">
+                            <TextBlock x:Name="UserBalanceText" Text="Баланс: 0.00 руб." Foreground="#66c0f4" FontSize="12" FontWeight="Bold"/>
+                        </Button>
                         <Separator Background="#3e434a" Margin="0,5"/>
                         <Button Content="Об аккаунте" Foreground="LightGray" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
 

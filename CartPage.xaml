@@ -3,7 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#1b2838">
     <UserControl.Resources>
-        <Style x:Key="BuyButtonStyle" TargetType="Button" >
+        <Style x:Key="BuyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#67bc19"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#82d22a"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <Grid Margin="40,20">
@@ -51,7 +69,7 @@
                     <TextBlock Text="Итоговая сумма:" Foreground="#898989" FontSize="16"/>
                     <TextBlock x:Name="TotalAmountText" Text="0 руб." Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
                 </Grid>
-                <Button Content="Купить для себя" HorizontalAlignment="Right" Margin="0,15,0,0" Width="300" Height="35" Style="{StaticResource BuyButtonStyle}" Click="Purchase_Click"/>
+                <Button Content="Купить." HorizontalAlignment="Right" Margin="0,15,0,0" Width="300" Height="35" Style="{StaticResource BuyButtonStyle}" Click="Purchase_Click"/>
             </StackPanel>
         </Border>
     </Grid>

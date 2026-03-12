@@ -223,19 +223,11 @@ namespace SteamLamp
             authWindow.Show();
             this.Close();
         }
-
         private void GameCard_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button;
-            var game = btn.Tag as Game;
-            if (game != null)
+            if (sender is Button btn && btn.Tag is Game selectedgame)
             {
-                ModalGameTitle.Text = game.Title;
-                ModalGameDesc.Text = game.Description;
-                ModalGamePrice.Text = game.Price;
-                ModalBuyBtn.Tag = game.Title;
-                ModalBuyBtn.Content = game.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase) ? "Добавить в Библиотеку" : "В корзину";
-                GameDetailsOverlay.Visibility = Visibility.Visible;
+                OpenGameDetails(selectedgame);
             }
         }
 
@@ -255,23 +247,64 @@ namespace SteamLamp
             _cartList.Clear();
             UpdateCartUI();
         }
-    }
 
-    public class PriceToButtonTextConverter : System.Windows.Data.IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string price = value as string;
-            if (price != null && price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
+            string search = SearchBox.Text.Trim().ToLower();
+            if (string.IsNullOrWhiteSpace(search))
             {
-                return "В библиотеку";
+                SearchPopup.IsOpen = false;
+                return;
             }
-            return "В корзину";
+            using (var db = new AppDbContext())
+            {
+                var fillterGames = db.Games.Where(g => g.Title.ToLower().Contains(search)).Take(5).ToList();
+                if (fillterGames.Any())
+                {
+                    SearchResultsList.ItemsSource = fillterGames;
+                    SearchPopup.IsOpen = true;
+                }
+                else
+                {
+                    SearchPopup.IsOpen = false;
+                }
+            }
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        private void SearchResultsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (SearchResultsList.SelectedItem is Game selectedgame)
+            {
+                OpenGameDetails(selectedgame);
+                SearchPopup.IsOpen = false ;
+                SearchBox.Text = " ";
+                SearchResultsList.SelectedItem = null;
+            }
+        }
+        private void OpenGameDetails(Game game) 
+        {
+            if (game ==null)
+            {
+                return;
+            }
+            ModalGameTitle.Text = game.Title;
+            ModalGameDesc.Text = game.Description;
+            ModalGamePrice.Text = game.Price;
+            ModalBuyBtn.DataContext = game;
+            ModalBuyBtn.Tag = game.Title;
+            GameDetailsOverlay.Visibility = Visibility.Visible;
+        }
+        private void SearchBox_GotFocus(object sender, RoutedEventArgs e) 
+        {
+            if (!string.IsNullOrWhiteSpace(SearchBox.Text))
+            {
+                SearchPopup.IsOpen = true;
+            }
+        }
+        private void OpenWallet_Click(object sender, RoutedEventArgs e)
+        {
+            AccountPopup.IsOpen = false;
+            MainContentFrame.Content = new WalletPage(this); 
         }
     }
+    
 }

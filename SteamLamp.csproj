@@ -30,7 +30,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp></NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -158,6 +159,7 @@
     <Compile Include="PaymentPage.xaml.cs">
       <DependentUpon>PaymentPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PriceToButtonTextConverter.cs" />
     <Compile Include="ProfilePage.xaml.cs">
       <DependentUpon>ProfilePage.xaml</DependentUpon>
     </Compile>
@@ -165,6 +167,9 @@
     <Compile Include="User.cs" />
     <Compile Include="SIGN_UP.xaml.cs">
       <DependentUpon>SIGN_UP.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WalletPage.xaml.cs">
+      <DependentUpon>WalletPage.xaml</DependentUpon>
     </Compile>
     <Page Include="EditProfileControl.xaml">
       <SubType>Designer</SubType>
@@ -203,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SIGN_UP.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WalletPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

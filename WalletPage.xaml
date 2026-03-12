@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="SteamLamp.WalletPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#1b2838">
+    <UserControl.Resources>
+        <Style x:Key="BuyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#67bc19"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#82d22a"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="50">
+        <StackPanel x:Name="AmountSelectionPanel" MaxWidth="500">
+            <TextBlock Text="ПОПОЛНЕНИЕ БАЛАНСА" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
+            <TextBlock Text="Выберите сумму для пополнения вашего кошелька Steam Lamp:" Foreground="#898989" Margin="0,0,0,20"/>
+
+            <UniformGrid Columns="2">
+                <Button Content="150 руб." Click="SelectAmount_Click" Tag="150" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
+                <Button Content="500 руб." Click="SelectAmount_Click" Tag="500" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
+                <Button Content="1000 руб." Click="SelectAmount_Click" Tag="1000" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
+                <Button Content="2500 руб." Click="SelectAmount_Click" Tag="2500" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
+            </UniformGrid>
+
+            <Button Content="Отмена" Click="Cancel_Click" Background="Transparent" Foreground="Gray" Margin="0,20,0,0" BorderThickness="0"/>
+        </StackPanel>
+
+        <StackPanel x:Name="PaymentDetailsPanel" Visibility="Collapsed" MaxWidth="400">
+            <TextBlock Text="СПОСОБ ОПЛАТЫ" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <Border Background="#2a2e33" Padding="20" CornerRadius="5">
+                <StackPanel>
+                    <TextBlock Text="Номер карты:" Foreground="LightGray" Margin="0,0,0,5"/>
+                    <TextBox x:Name="CardNumberBox" MaxLength="19" FontSize="18" Padding="10" Background="#1b2838" Foreground="White" BorderBrush="#3d4450"/>
+                    <TextBlock Text="Пример: 1234 5678 1234 5678" Foreground="Gray" FontSize="10" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <TextBlock x:Name="SelectedAmountText" Text="Сумма: 0 руб." Foreground="White" FontSize="18" Margin="0,20"/>
+
+            <Button Content="Оплатить" Click="ProcessPayment_Click" Style="{StaticResource BuyButtonStyle}" Height="50"/>
+            <Button Content="Назад" Click="BackToAmounts_Click" Background="Transparent" Foreground="Gray" Margin="0,10" BorderThickness="0"/>
+        </StackPanel>
+
+        <StackPanel x:Name="ProcessingPanel" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="StatusText" Text="Связь с банком..." Foreground="White" FontSize="20" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <ProgressBar x:Name="WalletProgressBar" Width="300" Height="10" Foreground="#66c0f4" Background="#3d4450" BorderThickness="0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

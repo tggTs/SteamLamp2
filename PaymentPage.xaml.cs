@@ -81,6 +81,7 @@ namespace SteamLamp
                     {
                         _main.UserBalanceText.Text = $"Баланс: {Session.CurrentUser.Balance:N2} руб.";
                     }
+                    _main.ClearCart();
                     StatusText.Text = "Покупка завершена! Возвращение в магазин...";
                     PaymentProgressBar.BeginAnimation(ProgressBar.ValueProperty, null); // Сброс анимации
                     PaymentProgressBar.Value = 0;
@@ -88,8 +89,7 @@ namespace SteamLamp
 
                     returnAnim.Completed += (s2, args2) =>
                     {
-                        StartFlightAnimation();
-                        _main.ClearCart();
+                        _main.OpenStore_Click(null, null);
                     };
                     PaymentProgressBar.BeginAnimation(ProgressBar.ValueProperty, returnAnim);
                 };
@@ -105,50 +105,6 @@ namespace SteamLamp
             _main.OpenCart_Click(null, null);
         }
 
-        private void StartFlightAnimation()
-        {
-            try
-            {
-               
-                Panel container = VisualTreeHelper.GetChild(_main, 0) as Panel;
-                if (container == null) return;
-
-                Rectangle flyRect = new Rectangle
-                {
-                    Width = 25,
-                    Height = 25,
-                    Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4")),
-                    RadiusX = 5,
-                    RadiusY = 5,
-                    IsHitTestVisible = false,
-                    RenderTransform = new TranslateTransform()
-                };
-
-                container.Children.Add(flyRect);
-
-                Point startPos = this.TransformToVisual(_main).Transform(new Point(this.ActualWidth / 2, this.ActualHeight / 2));
-                Point endPos = _main.BtnLibrary.TransformToVisual(_main).Transform(new Point(_main.BtnLibrary.ActualWidth / 2, _main.BtnLibrary.ActualHeight / 2));
-
-                TranslateTransform trans = (TranslateTransform)flyRect.RenderTransform;
-
-                DoubleAnimation animX = new DoubleAnimation(startPos.X, endPos.X, TimeSpan.FromMilliseconds(800));
-                DoubleAnimation animY = new DoubleAnimation(startPos.Y, endPos.Y, TimeSpan.FromMilliseconds(800));
-                DoubleAnimation animFade = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(800));
-
-                animY.Completed += (s, args) =>
-                {
-                    container.Children.Remove(flyRect);
-                    _main.OpenStore_Click(null, null); 
-                };
-
-                trans.BeginAnimation(TranslateTransform.XProperty, animX);
-                trans.BeginAnimation(TranslateTransform.YProperty, animY);
-                flyRect.BeginAnimation(Rectangle.OpacityProperty, animFade);
-            }
-            catch
-            {
-                _main.OpenStore_Click(null, null);
-            }
-        }
+       
     }
 }

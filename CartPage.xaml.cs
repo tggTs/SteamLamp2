@@ -34,7 +34,7 @@ namespace SteamLamp
             CartItemsControl.ItemsSource = null;
             CartItemsControl.ItemsSource = _items;
             double total = _items.Sum(i => { if (string.IsNullOrWhiteSpace(i.Price)) return 0;
-            string p = i.Price.ToLower().Replace("руб.","").Replace(".","").Replace(" ","").Trim();
+                string p = i.Price.ToLower().Replace("руб.","").Replace(".","").Replace(" ","").Trim();
                 return double.TryParse(p, out double res) ? res : 0;
             });
             TotalAmountText.Text = $"{total:N2} руб.";
@@ -49,6 +49,11 @@ namespace SteamLamp
 
         private void Purchase_Click(object sender, RoutedEventArgs e)
         {
+            if (_items == null || _items.Count ==0)
+            {
+                MessageBox.Show("Ваша корзина пуста. Добавьте хотя бы ону игры для покупки.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             _main.MainContentFrame.Content = new PaymentPage(_items, _main);
         }
     }

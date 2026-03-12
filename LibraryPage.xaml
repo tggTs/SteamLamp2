@@ -101,7 +101,7 @@
 
                 <Border Grid.Row="1" Background="#2a323d" Margin="0,-50,0,0" Padding="40,25">
                     <StackPanel Orientation="Horizontal">
-                        <Button Width="170" Height="50" BorderThickness="0" Cursor="Hand" Foreground="White">
+                        <Button Width="170" Height="50" BorderThickness="0" Cursor="Hand" Foreground="White" Click="Button_Click_1">
                             <Button.Background>
                                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                     <GradientStop Color="#75b022" Offset="0"/>
