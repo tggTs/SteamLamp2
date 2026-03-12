@@ -26,8 +26,12 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Grid.Column="0" Width="124" Height="124" BorderBrush="#66c0f4" BorderThickness="2">
-                            <Grid x:Name="ProfileAvatarBrush" Background="#212c3d">
-                                <TextBlock Text="AVA" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid Background="#212c3d">
+                                <TextBlock Text="No Image" Foreground="#4f535b" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
+
+                                <Image x:Name="ProfileAvatar" 
+                                       Stretch="UniformToFill" 
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
                             </Grid>
                         </Border>
 

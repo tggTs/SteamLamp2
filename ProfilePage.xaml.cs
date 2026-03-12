@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SteamLamp
 {
@@ -14,6 +16,7 @@ namespace SteamLamp
             InitializeComponent();
             LoadUserData();
         }
+
         public void LoadUserData()
         {
             if (Session.CurrentUser != null)
@@ -22,7 +25,33 @@ namespace SteamLamp
                 ProfileBio.Text = string.IsNullOrWhiteSpace(Session.CurrentUser.Bio)
                     ? "Описание профиля не заполнено."
                     : Session.CurrentUser.Bio;
+                if (Session.CurrentUser.Avatar != null)
+                {
+                    ProfileAvatar.Source = BytesToImage(Session.CurrentUser.Avatar);
+                }
+
                 LoadFriendsPreview();
+            }
+        }
+        private BitmapImage BytesToImage(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length == 0) return null;
+            try
+            {
+                var image = new BitmapImage();
+                using (var mem = new MemoryStream(bytes))
+                {
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.StreamSource = mem;
+                    image.EndInit();
+                }
+                image.Freeze();
+                return image;
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -83,7 +112,6 @@ namespace SteamLamp
         {
             var editControl = new EditProfileControl();
             FriendsOverlay.Content = editControl;
-
             MainProfileLayout.Visibility = Visibility.Collapsed;
             FriendsOverlay.Visibility = Visibility.Visible;
         }
