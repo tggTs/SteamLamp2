@@ -34,13 +34,16 @@ namespace SteamLamp
             InitializeComponent();
             UpdateUIState();
             this.Loaded += (s, e) => { MainContentFrame.Content = DefaultStoreView; LoadGamesFromDB(); };
+
             if (Session.CurrentUser != null)
             {
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
+                SetOnlineStatus(true);
             }
             UpdateMenuHighlight(BtnStore);
         }
+<<<<<<< HEAD
         private void ApplyGuestMode() 
         {
             CurrentRole = UserRole.Guest;
@@ -58,6 +61,36 @@ namespace SteamLamp
             }
             return true;
         }
+=======
+        private void SetOnlineStatus(bool isOnline)
+        {
+            try
+            {
+                if (Session.CurrentUser != null)
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        var user = db.Users.Find(Session.CurrentUser.Id);
+                        if (user != null)
+                        {
+                            user.IsOnline = isOnline;
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка статуса: " + ex.Message);
+            }
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            SetOnlineStatus(false);
+            base.OnClosed(e);
+        }
+
+>>>>>>> 25c9404e1db1e44901244c77f4b01b1d122a43af
         private void LoadGamesFromDB()
         {
             try
@@ -116,23 +149,6 @@ namespace SteamLamp
                         timer.Stop();
                     };
                     timer.Start();
-                }
-
-                if (gameToAdd != null && !_cartList.Any(g => g.Title == gameToAdd.Title))
-                {
-                    _cartList.Add(gameToAdd);
-                    UpdateCartUI();
-
-                    var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
-                    BtnCart.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
-                    var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-                    timer.Tick += (s, args) =>
-                    {
-                        BtnCart.Background = defaultBrush;
-                        timer.Stop();
-                    };
-                    timer.Start();
-
                 }
             }
         }
@@ -212,6 +228,7 @@ namespace SteamLamp
             MainContentFrame.Content = profilePage;
             UpdateMenuHighlight(BtnProfile);
         }
+
         private void EditProfile_Click(object sender, RoutedEventArgs e)
         {
             AccountPopup.IsOpen = false;
@@ -229,7 +246,7 @@ namespace SteamLamp
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void CloseApp_Click(object sender, RoutedEventArgs e) { Application.Current.Shutdown(); }
+        private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); } // Изменил на Close(), чтобы сработал OnClosed
 
         private void MinimizeApp_Click(object sender, RoutedEventArgs e) { this.WindowState = WindowState.Minimized; }
 
@@ -245,6 +262,9 @@ namespace SteamLamp
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
+            // ШАГ 3: Сбрасываем статус при выходе из аккаунта (Logout)
+            SetOnlineStatus(false);
+
             AccountPopup.IsOpen = false;
             Session.CurrentUser = null;
             SIGN_UP authWindow = new SIGN_UP();
@@ -253,6 +273,7 @@ namespace SteamLamp
             authWindow.Show();
             this.Close();
         }
+
         private void GameCard_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is Game selectedgame)
@@ -306,17 +327,14 @@ namespace SteamLamp
             if (SearchResultsList.SelectedItem is Game selectedgame)
             {
                 OpenGameDetails(selectedgame);
-                SearchPopup.IsOpen = false ;
-                SearchBox.Text = " ";
+                SearchPopup.IsOpen = false;
+                SearchBox.Text = "";
                 SearchResultsList.SelectedItem = null;
             }
         }
-        private void OpenGameDetails(Game game) 
+        private void OpenGameDetails(Game game)
         {
-            if (game ==null)
-            {
-                return;
-            }
+            if (game == null) return;
             ModalGameTitle.Text = game.Title;
             ModalGameDesc.Text = game.Description;
             ModalGamePrice.Text = game.Price;
@@ -324,7 +342,7 @@ namespace SteamLamp
             ModalBuyBtn.Tag = game.Title;
             GameDetailsOverlay.Visibility = Visibility.Visible;
         }
-        private void SearchBox_GotFocus(object sender, RoutedEventArgs e) 
+        private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(SearchBox.Text))
             {
@@ -334,7 +352,7 @@ namespace SteamLamp
         private void OpenWallet_Click(object sender, RoutedEventArgs e)
         {
             AccountPopup.IsOpen = false;
-            MainContentFrame.Content = new WalletPage(this); 
+            MainContentFrame.Content = new WalletPage(this);
         }
         public void UpdateUIState()
         {
@@ -361,5 +379,4 @@ namespace SteamLamp
             this.Close();
         }
     }
-    
 }

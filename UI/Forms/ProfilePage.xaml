@@ -8,7 +8,7 @@
              d:DesignHeight="600" d:DesignWidth="1050">
 
     <Grid>
-        <Grid x:Name="MainProfileLayout">
+        <Grid x:Name="MainProfileLayout" Opacity="1">
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Color="#202a3f" Offset="0.0"/>
@@ -17,6 +17,21 @@
             </Grid.Background>
 
             <StackPanel Margin="40,15" VerticalAlignment="Top">
+
+                <Button x:Name="BtnBackToMyProfile" 
+                        Visibility="Collapsed" 
+                        HorizontalAlignment="Left" 
+                        Margin="0,0,0,10" 
+                        Background="Transparent" 
+                        BorderThickness="0" 
+                        Cursor="Hand" 
+                        Click="BtnBackToMyProfile_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="←" Foreground="#66c0f4" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="ВАШ ПРОФИЛЬ" Foreground="#66c0f4" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                </Button>
+
                 <Border Background="#16202d" BorderBrush="#2a2e33" BorderThickness="1" Padding="20" Margin="0,0,0,15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -28,7 +43,6 @@
                         <Border Grid.Column="0" Width="124" Height="124" BorderBrush="#66c0f4" BorderThickness="2">
                             <Grid Background="#212c3d">
                                 <TextBlock Text="No Image" Foreground="#4f535b" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10"/>
-
                                 <Image x:Name="ProfileAvatar" 
                                        Stretch="UniformToFill" 
                                        RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -36,8 +50,17 @@
                         </Border>
 
                         <StackPanel Grid.Column="1" Margin="20,5,0,0">
-                            <TextBlock x:Name="ProfileNickname" Text="NickNAME" FontSize="26" Foreground="White" FontWeight="Bold"/>
-                            <TextBlock Text="В сети" Foreground="#66c0f4" FontSize="13" Margin="0,2"/>
+                            <TextBlock x:Name="ProfileNickname" 
+                                       Text="NickNAME" 
+                                       FontSize="26" 
+                                       Foreground="#66c0f4" 
+                                       FontWeight="Bold"/>
+
+                            <TextBlock x:Name="StatusText" 
+                                       Text="В сети" 
+                                       Foreground="#66c0f4" 
+                                       FontSize="13" 
+                                       Margin="0,2"/>
 
                             <TextBlock x:Name="ProfileBio" 
                                        Text="Здесь будет ваше описание..." 
@@ -56,7 +79,9 @@
                                     <TextBlock Text="10" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
-                            <Button Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand" Click="Button_Click">
+
+                            <Button x:Name="BtnEditProfile" Content="Редактировать" Margin="0,15,0,0" Width="130" Height="28" 
+                                    Background="#3d4450" Foreground="White" BorderThickness="0" Cursor="Hand" Click="Button_Click">
                                 <Button.Resources>
                                     <Style TargetType="Border">
                                         <Setter Property="CornerRadius" Value="2"/>
@@ -89,7 +114,8 @@
                             <StackPanel>
                                 <Grid Margin="0,0,0,10">
                                     <TextBlock Text="ДРУЗЬЯ" Foreground="White" FontSize="12" FontWeight="Bold"/>
-                                    <Button Content="Все" HorizontalAlignment="Right" Foreground="#66c0f4" Background="Transparent" BorderThickness="0" Click="OpenFriends_Click" Cursor="Hand"/>
+                                    <Button Content="Все" HorizontalAlignment="Right" Foreground="#66c0f4" 
+                                            Background="Transparent" BorderThickness="0" Click="OpenFriends_Click" Cursor="Hand"/>
                                 </Grid>
                                 <StackPanel x:Name="FriendsPreviewContainer">
                                 </StackPanel>
