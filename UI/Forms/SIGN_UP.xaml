@@ -69,8 +69,8 @@
                     </StackPanel>
                     <StackPanel x:Name="LoginForm" Visibility="Collapsed">
                         <TextBlock Text="ВХОД В АККАУНТ" Foreground="White" FontSize="22" FontWeight="Light" Margin="0,0,0,20"/>
-                        <TextBlock Text="НИКНЕЙМ" Foreground="#afafaf" FontSize="10" Margin="0,0,0,5"/>
-                        <TextBox x:Name="LogNick" Style="{StaticResource SteamTextBox}"/>
+                        <TextBlock Text="ЛОГИН" Foreground="#afafaf" FontSize="10" Margin="0,0,0,5"/>
+                        <TextBox x:Name="LogLogin" Style="{StaticResource SteamTextBox}"/>
                         <TextBlock Text="ПАРОЛЬ" Foreground="#afafaf" FontSize="10" Margin="0,0,0,5"/>
                         <PasswordBox x:Name="LogPass" Style="{StaticResource SteamPasswordBox}"/>
                         <Button Content="Войти" Height="40" Margin="0,10,0,15" Style="{StaticResource SteamActionButtonStyle}" Click="Login_Click"/>

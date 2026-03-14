@@ -25,18 +25,72 @@
         </Style>
     </UserControl.Resources>
     <Grid Margin="50">
-        <StackPanel x:Name="AmountSelectionPanel" MaxWidth="500">
+        <StackPanel x:Name="AmountSelectionPanel" MaxWidth="700">
             <TextBlock Text="ПОПОЛНЕНИЕ БАЛАНСА" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
             <TextBlock Text="Выберите сумму для пополнения вашего кошелька Steam Lamp:" Foreground="#898989" Margin="0,0,0,20"/>
+            <Border Background="#101822" Margin="0,0,0,10" Padding="15,10">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left">
+                        <TextBlock Text="Добавить" Foreground="#c6d4df" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="150 руб." Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="Black" >
+                        <TextBlock Text="150 руб." Foreground="White" VerticalAlignment="Center" Margin="15,0"/>
+                        <Button Content="Пополнить" Cursor="Hand" Click="SelectAmount_Click" Tag="150" Style="{StaticResource BuyButtonStyle}" Padding="20,8" Width="85"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <Border Background="#101822" Margin="0,0,0,10" Padding="15,10">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left">
+                        <TextBlock Text="Добавить" Foreground="#c6d4df" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="500 руб." Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="Black" >
+                        <TextBlock Text="500 руб." Foreground="White" VerticalAlignment="Center" Margin="15,0"/>
+                        <Button Content="Пополнить" Click="SelectAmount_Click" Tag="500" Style="{StaticResource BuyButtonStyle}" Padding="20,8" Cursor="Hand" Width="85"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <Border Background="#101822" Margin="0,0,0,10" Padding="15,10">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left">
+                        <TextBlock Text="Добавить" Foreground="#c6d4df" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="750 руб." Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="Black">
+                        <TextBlock Text="750 руб." Foreground="White" VerticalAlignment="Center" Margin="15,0"/>
+                        <Button Content="Пополнить" Cursor="Hand" Click="SelectAmount_Click" Tag="750" Style="{StaticResource BuyButtonStyle}" Padding="20,8" Width="85" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
-            <UniformGrid Columns="2">
-                <Button Content="150 руб." Click="SelectAmount_Click" Tag="150" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
-                <Button Content="500 руб." Click="SelectAmount_Click" Tag="500" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
-                <Button Content="1000 руб." Click="SelectAmount_Click" Tag="1000" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
-                <Button Content="2500 руб." Click="SelectAmount_Click" Tag="2500" Margin="5" Style="{StaticResource BuyButtonStyle}" Height="50"/>
-            </UniformGrid>
+            <Border Background="#101822" Margin="0,0,0,10" Padding="15,10">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left">
+                        <TextBlock Text="Добавить" Foreground="#c6d4df" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="1000 руб." Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="Black">
+                        <TextBlock Text="1000 руб." Foreground="White" VerticalAlignment="Center" Margin="15,0"/>
+                        <Button Content="Пополнить" Cursor="Hand" Click="SelectAmount_Click" Tag="1000" Style="{StaticResource BuyButtonStyle}" Padding="20,8" Width="85"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
 
-            <Button Content="Отмена" Click="Cancel_Click" Background="Transparent" Foreground="Gray" Margin="0,20,0,0" BorderThickness="0"/>
+            <Border Background="#101822" Margin="0,0,0,10" Padding="15,10">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left">
+                        <TextBlock Text="Добавить" Foreground="#c6d4df" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="2000 руб." Foreground="White" FontSize="16" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Background="Black">
+                        <TextBlock Text="2000 руб." Foreground="White" VerticalAlignment="Center" Margin="15,0"/>
+                        <Button Content="Пополнить" Cursor="Hand" Click="SelectAmount_Click" Tag="2000" Style="{StaticResource BuyButtonStyle}" Padding="20,8" Width="85"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <Button Content="Отмена" Click="Cancel_Click" Background="Transparent" Foreground="Gray" Margin="0,20,0,0" HorizontalAlignment="Left" BorderThickness="0"/>
         </StackPanel>
 
         <StackPanel x:Name="PaymentDetailsPanel" Visibility="Collapsed" MaxWidth="400">

@@ -102,7 +102,7 @@ namespace SteamLamp
         }
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (LogNick.Text == "" || LogPass.Password == "")
+            if (string.IsNullOrWhiteSpace(LogLogin.Text) || string.IsNullOrWhiteSpace(LogPass.Password))
             {
                 ShowSteamMessage("ОШИБКА", "Введите данные!", true);
                 return;
@@ -114,7 +114,7 @@ namespace SteamLamp
             {
                 using (AppDbContext db = new AppDbContext())
                 {
-                    var user = db.Users.FirstOrDefault(u => u.Nickname == LogNick.Text && u.Password == LogPass.Password);
+                    var user = db.Users.FirstOrDefault(u => u.Login == LogLogin.Text && u.Password == LogPass.Password);
 
                     if (user != null)
                     {
