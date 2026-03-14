@@ -51,7 +51,7 @@ namespace SteamLamp
             if (btn != null && btn.Tag != null)
             {
                 string fileName = btn.Tag.ToString();
-                string resourcePath = $"/assets/{fileName}";
+                string resourcePath = $"ui/resources/assets/{fileName}";
                 try
                 {
                     Uri uri = new Uri(resourcePath, UriKind.Relative);

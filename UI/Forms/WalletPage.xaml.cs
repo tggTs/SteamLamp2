@@ -19,7 +19,7 @@ namespace SteamLamp
     /// <summary>
     /// Логика взаимодействия для WalletPage.xaml
     /// </summary>
-    public partial class WalletPage : Page
+    public partial class WalletPage : UserControl
     {
         private MainWindow _main;
         private decimal _amountTofill;
