@@ -317,7 +317,7 @@ namespace SteamLamp
         private void OpenWallet_Click(object sender, RoutedEventArgs e)
         {
             AccountPopup.IsOpen = false;
-            MainContentFrame.Content = new WalletPage(this);
+            MainContentFrame.Content = new WalletPage(this); 
         }
     }
 }
