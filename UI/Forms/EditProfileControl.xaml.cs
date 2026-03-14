@@ -52,29 +52,38 @@ namespace SteamLamp
             {
                 string fileName = btn.Tag.ToString();
                 string resourcePath = $"ui/resources/assets/{fileName}";
+
                 try
                 {
-                    Uri uri = new Uri(resourcePath, UriKind.Relative);
-                    var streamResource = Application.GetResourceStream(uri);
+                    var streamResource = Application.GetResourceStream(new Uri(resourcePath, UriKind.Relative));
 
                     if (streamResource == null)
                     {
-                        MessageBox.Show($"Файл {fileName} не найден в ресурсах. Проверь Build Action!");
-                        return;
+                        streamResource = Application.GetResourceStream(new Uri($"pack://application:,,,/Assets/{fileName}"));
                     }
-
-                    using (MemoryStream ms = new MemoryStream())
+                    if (streamResource != null)
                     {
-                        streamResource.Stream.CopyTo(ms);
-                        _selectedAvatarBytes = ms.ToArray();
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            streamResource.Stream.CopyTo(ms);
+                            _selectedAvatarBytes = ms.ToArray();
+                        }
+                        CurrentAvatarPreviewImage.Source = BytesToImage(_selectedAvatarBytes);
+                        AvatarPickerOverlay.Visibility = Visibility.Collapsed;
+                        EditMainPanel.Visibility = Visibility.Visible;
+                        EnableSaveButton();
                     }
-                    CurrentAvatarPreviewImage.Source = BytesToImage(_selectedAvatarBytes);
-                    CloseAvatarPicker_Click(null, null);
-                    EnableSaveButton();
+                    else
+                    {
+                        MessageBox.Show($"Файл {fileName} не найден по пути {resourcePath}.\n\n" +
+                                        "Проверь свойства файла в Visual Studio:\n" +
+                                        "1. Нажми правой кнопкой на картинку -> Свойства (Properties).\n" +
+                                        "2. Build Action (Действие при сборке) должно быть 'Resource'.");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при выборе аватара: " + ex.Message);
+                    MessageBox.Show("Ошибка при загрузке аватара: " + ex.Message);
                 }
             }
         }

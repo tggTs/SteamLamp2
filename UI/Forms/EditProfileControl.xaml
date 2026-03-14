@@ -17,18 +17,8 @@
                                     BorderBrush="{TemplateBinding BorderBrush}" 
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     CornerRadius="2"/>
-
-                            <ScrollViewer x:Name="PART_ContentHost" 
-                                          Margin="8,0,8,0"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-
-                            <TextBlock Text="{TemplateBinding Tag}" 
-                                       Foreground="#4f535b" 
-                                       IsHitTestVisible="False"
-                                       Margin="12,0,0,0"
-                                       x:Name="Watermark"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                       Visibility="Collapsed"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="8,0,8,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <TextBlock Text="{TemplateBinding Tag}" Foreground="#4f535b" IsHitTestVisible="False" Margin="12,0,0,0" x:Name="Watermark" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Text" Value="">
@@ -48,7 +38,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" BorderBrush="Transparent" BorderThickness="2" CornerRadius="4">
+                        <Border x:Name="border" BorderBrush="Transparent" BorderThickness="2" CornerRadius="4" Background="{TemplateBinding Background}">
                             <ContentPresenter/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -73,8 +63,8 @@
                     <Button x:Name="BtnOpenAvatarStore" Content="Выберите аватар" Width="150" Height="32" HorizontalAlignment="Left" 
                             Background="#3d4450" Foreground="White" BorderThickness="0" Click="BtnOpenAvatarStore_Click" Cursor="Hand"/>
 
-                    <Border x:Name="CurrentAvatarPreviewBorder" Width="40" Height="40" HorizontalAlignment="Right" BorderBrush="#66c0f4" BorderThickness="1">
-                        <Image x:Name="CurrentAvatarPreviewImage" Stretch="UniformToFill"/>
+                    <Border x:Name="CurrentAvatarPreviewBorder" Width="40" Height="40" HorizontalAlignment="Right" BorderBrush="#66c0f4" BorderThickness="1" Background="#171a21">
+                        <Image x:Name="CurrentAvatarPreviewImage" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>
                 </Grid>
                 <TextBlock Text="Выберите аватарку из 6 предложенных вариантов" Foreground="#4f535b" FontSize="10" Margin="0,0,0,20"/>
@@ -109,22 +99,22 @@
 
                 <UniformGrid Columns="3" Width="360">
                     <Button Tag="ava1.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava1.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava1.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                     <Button Tag="ava2.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava2.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava2.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                     <Button Tag="ava3.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava3.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava3.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                     <Button Tag="ava4.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava4.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava4.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                     <Button Tag="ava5.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava5.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava5.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                     <Button Tag="ava6.png" Click="AvatarSelect_Click" Style="{StaticResource AvatarSelectionButtonStyle}">
-                        <Image Source="pack://application:,,,/Assets/ava6.png" Width="100" Height="100" Stretch="UniformToFill"/>
+                        <Image Source="/UI/Resources/Assets/ava6.png" Width="100" Height="100" Stretch="UniformToFill"/>
                     </Button>
                 </UniformGrid>
 
