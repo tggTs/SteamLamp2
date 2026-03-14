@@ -86,8 +86,14 @@ namespace SteamLamp
                 Margin = new Thickness(0, 0, 0, 6),
                 BorderBrush = new SolidColorBrush(Color.FromRgb(35, 43, 54)),
                 BorderThickness = new Thickness(1),
-                CornerRadius = new CornerRadius(3)
+                CornerRadius = new CornerRadius(3),
+                Tag = id,
+                Cursor = Cursors.Hand
             };
+
+            card.MouseEnter += (s, e) => card.Background = new SolidColorBrush(Color.FromRgb(38, 51, 69));
+            card.MouseLeave += (s, e) => card.Background = new SolidColorBrush(Color.FromRgb(22, 32, 45));
+            card.MouseLeftButtonDown += (s, e) => NavigateToUserProfile(id);
 
             Grid grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(45) });
@@ -132,7 +138,10 @@ namespace SteamLamp
                 else
                 {
                     Button addBtn = new Button { Content = "Добавить", Width = 90, Height = 26, Background = new SolidColorBrush(Color.FromRgb(103, 160, 19)), Foreground = Brushes.White, FontSize = 11, FontWeight = FontWeights.Bold, BorderThickness = new Thickness(0), Cursor = Cursors.Hand };
-                    addBtn.Click += (s, e) => AddToFriendsInDB(id, nickname);
+                    addBtn.Click += (s, e) => {
+                        e.Handled = true;
+                        AddToFriendsInDB(id, nickname);
+                    };
                     grid.Children.Add(addBtn);
                     Grid.SetColumn(addBtn, 2);
                 }
@@ -165,6 +174,7 @@ namespace SteamLamp
                 menu.Items.Add(removeFriend);
 
                 optionsBtn.Click += (s, e) => {
+                    e.Handled = true;
                     menu.PlacementTarget = optionsBtn;
                     menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
                     menu.IsOpen = true;
@@ -179,6 +189,21 @@ namespace SteamLamp
 
             card.Child = grid;
             FriendsContainer.Children.Add(card);
+        }
+        private void NavigateToUserProfile(int userId)
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(this);
+            while (parent != null && !(parent is ProfilePage))
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+
+            if (parent is ProfilePage profilePage)
+            {
+                profilePage.FriendsOverlay.Visibility = Visibility.Collapsed;
+                profilePage.MainProfileLayout.Visibility = Visibility.Visible;
+                profilePage.LoadUserData(userId);
+            }
         }
 
         private void RemoveFriendFromDB(int friendId, string friendNickname)
