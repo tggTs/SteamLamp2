@@ -18,11 +18,21 @@ namespace SteamLamp
         private List<Game> _showcaseGames;
         private int _currentPage = 0;
         private HashSet<string> _cartItems = new HashSet<string>();
+        public enum UserRole { Guest, User, Admin }
+        public UserRole CurrentRole = UserRole.Guest;
 
+        public static class currentUser
+        {
+            public static string Nickname { get; set; } = "Войти";
+            public static string Role { get; set; } = "Guest";
+            public static decimal Balance { get; set; } = 0;
+
+            public static bool IsAuthorized => Role != "Guest";
+        }
         public MainWindow()
         {
             InitializeComponent();
-
+            UpdateUIState();
             this.Loaded += (s, e) => { MainContentFrame.Content = DefaultStoreView; LoadGamesFromDB(); };
             if (Session.CurrentUser != null)
             {
@@ -31,7 +41,23 @@ namespace SteamLamp
             }
             UpdateMenuHighlight(BtnStore);
         }
-
+        private void ApplyGuestMode() 
+        {
+            CurrentRole = UserRole.Guest;
+            LoginButton.Visibility = Visibility.Visible;
+            AccountMenuButton.Visibility = Visibility.Collapsed;
+            CartCountText.Text = "0";
+            _cartList.Clear();
+        }
+        private bool CheckAccess() 
+        {
+            if (CurrentRole == UserRole.Guest) 
+            {
+                MessageBox.Show("Для этого действия необходимо войти в аккаунт или зарегистрироваться.","Доступ ограничен", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            return true;
+        }
         private void LoadGamesFromDB()
         {
             try
@@ -56,6 +82,7 @@ namespace SteamLamp
 
         public void AddToCart_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckAccess()) return;
             e.Handled = true;
             var btn = sender as Button;
             Game gameToAdd = btn.DataContext as Game;
@@ -165,6 +192,7 @@ namespace SteamLamp
 
         public void OpenStore_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckAccess()) return;
             MainContentFrame.Content = DefaultStoreView;
             UpdateMenuHighlight(BtnStore);
             LoadGamesFromDB();
@@ -172,12 +200,14 @@ namespace SteamLamp
 
         public void OpenLibrary_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckAccess()) return;
             MainContentFrame.Content = new LibraryPage();
             UpdateMenuHighlight(BtnLibrary);
         }
 
         public void OpenProfile_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckAccess()) return;
             ProfilePage profilePage = new ProfilePage();
             MainContentFrame.Content = profilePage;
             UpdateMenuHighlight(BtnProfile);
@@ -238,6 +268,7 @@ namespace SteamLamp
 
         public void OpenCart_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckAccess()) return;
             MainContentFrame.Content = new CartPage(_cartList, this);
             UpdateMenuHighlight(null);
         }
@@ -304,6 +335,30 @@ namespace SteamLamp
         {
             AccountPopup.IsOpen = false;
             MainContentFrame.Content = new WalletPage(this); 
+        }
+        public void UpdateUIState()
+        {
+            if (Session.CurrentUser != null)
+            {
+                CurrentRole = UserRole.User; 
+                LoginButton.Visibility = Visibility.Collapsed;
+                AccountMenuButton.Visibility = Visibility.Visible;
+                AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
+                UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
+            }
+            else
+            {
+                ApplyGuestMode();
+            }
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            SIGN_UP authWindow = new SIGN_UP();
+            authWindow.RegisterForm.Visibility = Visibility.Collapsed;
+            authWindow.LoginForm.Visibility = Visibility.Visible;
+            authWindow.Show();
+            this.Close();
         }
     }
     

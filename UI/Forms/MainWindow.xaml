@@ -152,7 +152,8 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Button x:Name="AccountMenuButton" Content="NickNAME ▼" Foreground="#919499" FontSize="13" Background="Transparent" BorderThickness="0" Margin="0,0,10,0" Padding="10,5" VerticalAlignment="Center" Cursor="Hand" Click="AccountMenuButton_Click"/>
+                        <Button x:Name="LoginButton" Content="Войти / Регистрация" Visibility="Visible" Style="{StaticResource BuyButtonStyle}" Height="28" Margin="0,0,10,0" Padding="15" Click="LoginButton_Click"/>
+                        <Button x:Name="AccountMenuButton" Content="NickNAME ▼" Foreground="#919499" FontSize="13" Background="Transparent" BorderThickness="0" Margin="0,0,10,0" Padding="10,5" VerticalAlignment="Center" Cursor="Hand" Click="AccountMenuButton_Click" Visibility="Collapsed"/>
                         <Button Content="—" Click="MinimizeApp_Click" Style="{StaticResource WindowControlButtonStyle}"/>
                         <Button x:Name="MaximizeBtn" Content="⬜️" Click="MaximizeApp_Click" Style="{StaticResource WindowControlButtonStyle}" FontSize="12"/>
                         <Button Content="✕" Click="CloseApp_Click" Style="{StaticResource CloseButtonStyle}"/>
