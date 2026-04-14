@@ -9,6 +9,13 @@
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
 
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" 
+                      ResizeBorderThickness="8" 
+                      CornerRadius="20" 
+                      GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+
     <Window.Resources>
         <local:PathToImageConverter x:Key="PathToImageConverter"/>
 
@@ -40,11 +47,11 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#e81123"/>
                     <Setter Property="Foreground" Value="White"/>
-                </Trigger>     
-            </Style.Triggers>  
-        </Style>     
-    
-        <Style x:Key="SteamMenuButtonStyle" TargetType="Button">   
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SteamMenuButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="LightGray"/>
             <Setter Property="FontSize" Value="20"/>
@@ -140,13 +147,6 @@
         </Style>
     </Window.Resources>
 
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="64" 
-                      ResizeBorderThickness="8" 
-                      CornerRadius="20" 
-                      GlassFrameThickness="0" />
-    </WindowChrome.WindowChrome>
-
     <Border Background="#1b2838" BorderBrush="#2a2e33" BorderThickness="1" ClipToBounds="True" CornerRadius="20">
         <Grid>
             <Grid.RowDefinitions>
@@ -160,22 +160,34 @@
                     <StackPanel x:Name="MainMenuStack" Orientation="Vertical" VerticalAlignment="Center" Margin="15,0,15,0">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <TextBlock Text="STEAMLAMP" Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,15,0" Opacity="0.8"/>
-                            <Button x:Name="BtnSupport" Content="Тех. поддержка" Visibility="Collapsed" Click="OpenSupport_Click"/>
+                            <Button x:Name="BtnSupport" Content="Тех. поддержка" Visibility="Collapsed" Foreground="#919499" FontSize="10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="OpenSupport_Click" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Click="OpenStore_Click"/>
-                            <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Click="OpenLibrary_Click"/>
-                            <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Click="OpenProfile_Click"/>
+                            <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenStore_Click"/>
+                            <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenLibrary_Click"/>
+                            <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenProfile_Click"/>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                            <Button x:Name="LoginButton" Content="Войти / Регистрация" Style="{StaticResource BuyButtonStyle}" Click="LoginButton_Click"/>
-                            <Button x:Name="AccountMenuButton" Content="NickNAME ▼" Foreground="#919499" Background="Transparent" BorderThickness="0" Click="AccountMenuButton_Click" Visibility="Collapsed"/>
+                            <Button x:Name="LoginButton" Content="Войти / Регистрация" Visibility="Visible" Style="{StaticResource BuyButtonStyle}" Height="28" Margin="0,0,10,0" Click="LoginButton_Click"/>
+                            <Button x:Name="AccountMenuButton" Content="NickNAME ▼" Foreground="#919499" FontSize="13" Background="Transparent" BorderThickness="0" Margin="0,0,10,0" VerticalAlignment="Center" Cursor="Hand" Click="AccountMenuButton_Click" Visibility="Collapsed"/>
+
+                            <Popup x:Name="AccountPopup" PlacementTarget="{Binding ElementName=AccountMenuButton}" StaysOpen="False" AllowsTransparency="True" HorizontalOffset="-100" VerticalOffset="5">
+                                <Border Background="#2a2e33" BorderBrush="#1b2838" BorderThickness="1" Width="180" CornerRadius="5">
+                                    <StackPanel Margin="10">
+                                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Click="OpenWallet_Click" HorizontalContentAlignment="Left">
+                                            <TextBlock x:Name="UserBalanceText" Text="Баланс: 0.00 руб." Foreground="#66c0f4" FontSize="12" FontWeight="Bold"/>
+                                        </Button>
+                                        <Separator Background="#3e434a" Margin="0,5"/>
+                                        <Button Content="Выйти из аккаунта" Click="Logout_Click" Foreground="#e81123" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Cursor="Hand" Margin="0,5"/>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
                         </StackPanel>
                         <Button Content="—" Click="MinimizeApp_Click" Style="{StaticResource WindowControlButtonStyle}"/>
-                        <Button x:Name="MaximizeBtn" Content="⬜" Click="MaximizeApp_Click" Style="{StaticResource WindowControlButtonStyle}"/>
+                        <Button x:Name="MaximizeBtn" Content="⬜️" Click="MaximizeApp_Click" Style="{StaticResource WindowControlButtonStyle}" FontSize="12"/>
                         <Button Content="✕" Click="CloseApp_Click" Style="{StaticResource CloseButtonStyle}"/>
                     </StackPanel>
                 </Grid>
@@ -191,27 +203,34 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-
                                     <Grid x:Name="SearchContainer">
-                                        <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus"/>
+                                        <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" Tag="Поиск по названию..." TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus"/>
                                         <Popup x:Name="SearchPopup" PlacementTarget="{Binding ElementName=SearchBox}" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
                                             <Border Background="#2a2e33" BorderBrush="#3d4450" BorderThickness="1" Width="300">
                                                 <ListBox x:Name="SearchResultsList" Background="Transparent" BorderThickness="0" SelectionChanged="SearchResultsList_SelectionChanged">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal" Margin="5">
-                                                                <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Width="45" Height="30" Stretch="UniformToFill"/>
-                                                                <TextBlock Text="{Binding Title}" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                                            </StackPanel>
+                                                            <Grid Margin="5">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="50"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Border Background="#1b2838" Height="30" Width="45" CornerRadius="2" ClipToBounds="True">
+                                                                    <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
+                                                                </Border>
+                                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                                    <TextBlock Text="{Binding Title}" Foreground="White" FontSize="13" FontWeight="Bold"/>
+                                                                    <TextBlock Text="{Binding Price}" Foreground="#66c0f4" FontSize="11"/>
+                                                                </StackPanel>
+                                                            </Grid>
                                                         </DataTemplate>
                                                     </ListBox.ItemTemplate>
                                                 </ListBox>
                                             </Border>
                                         </Popup>
                                     </Grid>
-
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Button x:Name="BtnCart" Content="🛒 КОРЗИНА" Click="OpenCart_Click" Background="#3d4450" Foreground="White" Padding="10,5" BorderThickness="0"/>
+                                        <Button x:Name="BtnCart" Click="OpenCart_Click" Content="🛒 КОРЗИНА" Foreground="White" Background="#3d4450" Padding="10,5" BorderThickness="0" Cursor="Hand" />
                                         <Border Background="#66c0f4" CornerRadius="2" Margin="5,0,0,0" Padding="5,2">
                                             <TextBlock x:Name="CartCountText" Text="0" Foreground="Black" FontWeight="Bold"/>
                                         </Border>
@@ -227,26 +246,51 @@
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
                                     <Button Grid.Column="0" Content="‹" Style="{StaticResource NavArrowStyle}" Click="PrevPage_Click"/>
-
                                     <Border Grid.Column="1" Background="#16202d" Height="300" BorderBrush="#2a2e33" BorderThickness="1">
                                         <Grid x:Name="ShowcaseContent">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="2*"/>
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill" Margin="10"/>
+                                            <Border Background="#212c3d" Margin="10" ClipToBounds="True">
+                                                <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
+                                            </Border>
                                             <StackPanel Grid.Column="1" Margin="10,20">
                                                 <TextBlock x:Name="ShowcaseName" Text="GameName" Foreground="White" FontSize="22" FontWeight="Bold"/>
+                                                <TextBlock Text="От создателей LampSoft" Foreground="#898989" FontSize="12" Margin="0,5"/>
                                                 <TextBlock x:Name="ShowcasePrice" Text="0 руб." Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,40,0,10"/>
-                                                <Button x:Name="ShowcaseBuyBtn" Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" Width="200" HorizontalAlignment="Left"/>
+                                                <Button x:Name="ShowcaseBuyBtn" Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" HorizontalAlignment="Left" Width="292" Height="37"/>
                                             </StackPanel>
                                         </Grid>
                                     </Border>
-
                                     <Button Grid.Column="2" Content="›" Style="{StaticResource NavArrowStyle}" Click="NextPage_Click"/>
                                 </Grid>
 
                                 <ItemsControl x:Name="GamesListControl" Margin="0,20,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="5"  MouseLeftButtonDown="GameCard_Click" Tag="{Binding}"  Cursor="Hand"  Background="Transparent">
+                                                <Border Background="#16202d" CornerRadius="5" ClipToBounds="True">
+                                                    <StackPanel>
+                                                        <Border Height="120" ClipToBounds="True">
+                                                            <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
+                                                        </Border>
+
+                                                        <Border Padding="12">
+                                                            <StackPanel>
+                                                                <TextBlock Text="{Binding Title}" Foreground="White" FontWeight="Bold"  FontSize="15" TextTrimming="CharacterEllipsis" Margin="0,0,0,8"/>
+                                                                <Grid>
+                                                                    <TextBlock Text="{Binding Price}" Foreground="#66c0f4"  VerticalAlignment="Center" FontSize="14"  FontWeight="SemiBold"/>
+
+                                                                    <Button Content="В корзину"  HorizontalAlignment="Right" Padding="15,6" MinWidth="80" FontSize="12" FontWeight="Bold" Style="{StaticResource BuyButtonStyle}" Tag="{Binding}" Click="AddToCart_Click"/>
+                                                                </Grid>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <UniformGrid Columns="3" />
@@ -257,7 +301,6 @@
                         </ScrollViewer>
                     </Grid>
                 </ContentControl>
-
                 <Grid x:Name="GameDetailsOverlay" Visibility="Collapsed" Panel.ZIndex="100">
                     <Border Background="#CC000000" MouseLeftButtonDown="CloseOverlay_Click"/>
                     <Border Background="#1b2838" Width="800" Height="450" CornerRadius="10" BorderBrush="#66c0f4" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -266,13 +309,20 @@
                                 <ColumnDefinition Width="1.5*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
+                            <Border Background="#212c3d" CornerRadius="5" ClipToBounds="True">
+                                <Image Source="{Binding DetailedImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
+                            </Border>
                             <StackPanel Grid.Column="1" Margin="25,0,0,0">
-                                <TextBlock x:Name="ModalGameTitle" Foreground="White" FontSize="26" FontWeight="Bold" TextWrapping="Wrap"/>
-                                <TextBlock x:Name="ModalGameDesc" Foreground="#898989" Margin="0,20,0,0" TextWrapping="Wrap" Height="200" FontSize="14"/>
-                                <TextBlock x:Name="ModalGamePrice" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,20,0,10"/>
-                                <Button Content="В КОРЗИНУ" Click="AddToCart_Click" Style="{StaticResource BuyButtonStyle}"/>
-                                <Button Content="ЗАКРЫТЬ" Click="CloseOverlay_Click" Margin="0,10,0,0" Background="Transparent" Foreground="Gray" BorderThickness="0"/>
+                                <Grid>
+                                    <TextBlock x:Name="ModalGameTitle" Text="{Binding Title}" Foreground="White" FontSize="26" FontWeight="Bold" TextWrapping="Wrap" MaxWidth="250" HorizontalAlignment="Left"/>
+                                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Foreground="Gray" BorderThickness="0" FontSize="20" Cursor="Hand" Click="CloseOverlay_Click"/>
+                                </Grid>
+
+                                <TextBlock x:Name="ModalGameDesc" Text="{Binding Description}" Foreground="#898989" Margin="0,20,0,0" TextWrapping="Wrap" Height="180" FontSize="14"/>
+
+                                <TextBlock x:Name="ModalGamePrice" Text="{Binding Price}" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,20,0,10"/>
+
+                                <Button Content="В корзину" Tag="{Binding}" Click="AddToCart_Click" Style="{StaticResource BuyButtonStyle}" HorizontalAlignment="Stretch" Height="45" FontSize="18" FontWeight="Bold" Margin="0,5,20,0"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -280,21 +330,13 @@
             </Grid>
 
             <Border Grid.Row="2" Background="#171a21">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                    <TextBlock Text="ЗАГРУЗКИ" Foreground="#66c0f4" FontSize="11"/>
-                    <ProgressBar IsIndeterminate="True" Width="100" Height="4" Margin="10,0"/>
-                </StackPanel>
-            </Border>
-
-            <Popup x:Name="AccountPopup" PlacementTarget="{Binding ElementName=AccountMenuButton}" StaysOpen="False" AllowsTransparency="True">
-                <Border Background="#2a2e33" BorderBrush="#1b2838" BorderThickness="1" Width="180" CornerRadius="5">
-                    <StackPanel Margin="10">
-                        <TextBlock x:Name="UserBalanceText" Text="Баланс: 0.00 руб." Foreground="#66c0f4" FontSize="12" FontWeight="Bold"/>
-                        <Button Content="Кошелек" Click="OpenWallet_Click" Background="Transparent" Foreground="White" BorderThickness="0" Margin="0,5"/>
-                        <Button Content="Выйти" Click="Logout_Click" Foreground="#e81123" Background="Transparent" BorderThickness="0"/>
+                <Grid Margin="10,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="ЗАГРУЗКИ" Foreground="#66c0f4" FontSize="11" VerticalAlignment="Center"/>
+                        <ProgressBar IsIndeterminate="True" Width="100" Height="4" Margin="10,0" Foreground="#66c0f4" Background="#3d4450" BorderThickness="0"/>
                     </StackPanel>
-                </Border>
-            </Popup>
+                </Grid>
+            </Border>
         </Grid>
     </Border>
 </Window>

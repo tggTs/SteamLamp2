@@ -18,5 +18,6 @@ namespace SteamLamp
         public string Price { get; set; } = string.Empty;
         public string ImagePath { get; set; } = string.Empty;
         public bool IsShowcase { get; set; }
+        public string DetailedImagePath { get; set; }
     }
 }

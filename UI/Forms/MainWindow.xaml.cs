@@ -351,7 +351,15 @@ namespace SteamLamp
 
         private void GameCard_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is Game selectedgame) OpenGameDetails(selectedgame);
+            var element = sender as FrameworkElement;
+            if (element == null) return;
+            var selectedGame = element.Tag as Game;
+            if (selectedGame != null) 
+            {
+                GameDetailsOverlay.DataContext = selectedGame;
+                GameDetailsOverlay.Visibility = Visibility.Visible;
+            }
+            
         }
 
         private void CloseOverlay_Click(object sender, RoutedEventArgs e) => GameDetailsOverlay.Visibility = Visibility.Collapsed;
