@@ -265,7 +265,9 @@
     <Resource Include="UI\Resources\Assets\ava5.png" />
     <Resource Include="UI\Resources\Assets\ava6.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\Resources\Assets\GameImage\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
 </Project>

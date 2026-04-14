@@ -1,17 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+using System.IO;
+using IOPath = System.IO.Path;
+
 
 namespace SteamLamp
 {
+    public class PathToImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string path = value as string;
+            if (string.IsNullOrEmpty(path)) return null;
+
+            try
+            {
+
+                string fullPath = IOPath.IsPathRooted(path)? path: IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+
+                if (File.Exists(fullPath))
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+            }
+            catch (Exception ex){ Console.WriteLine("Ошибка статуса: " + ex.Message); }
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
     public partial class MainWindow : Window
     {
         private List<Game> _cartList = new List<Game>();
@@ -21,7 +56,7 @@ namespace SteamLamp
         public enum UserRole { Guest, User, Admin }
         public UserRole CurrentRole = UserRole.Guest;
 
-        public static class currentUser
+        public static class СurrentUser
         {
             public static string Nickname { get; set; } = "Войти";
             public static string Role { get; set; } = "Guest";
@@ -29,6 +64,7 @@ namespace SteamLamp
 
             public static bool IsAuthorized => Role != "Guest";
         }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,13 +89,20 @@ namespace SteamLamp
             CartCountText.Text = "0";
             _cartList.Clear();
         }
-        private bool CheckAccess() 
+        private bool CheckAccess(UserRole requiredRole = UserRole.User)
         {
-            if (CurrentRole == UserRole.Guest) 
+            if (CurrentRole == UserRole.Guest)
             {
-                MessageBox.Show("Для этого действия необходимо войти в аккаунт или зарегистрироваться.","Доступ ограничен", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Войдите в систему для выполнения этого действия.");
                 return false;
             }
+
+            if (requiredRole == UserRole.Admin && CurrentRole != UserRole.Admin)
+            {
+                MessageBox.Show("Нужны права администратора.");
+                return false;
+            }
+
             return true;
         }
         private void SetOnlineStatus(bool isOnline)
@@ -89,6 +132,7 @@ namespace SteamLamp
             SetOnlineStatus(false);
             base.OnClosed(e);
         }
+
         private void LoadGamesFromDB()
         {
             try
@@ -179,11 +223,23 @@ namespace SteamLamp
             if (_showcaseGames == null || !_showcaseGames.Any()) return;
 
             var currentGame = _showcaseGames[_currentPage];
-            ShowcaseName.Text = currentGame.Title;
-            ShowcasePrice.Text = currentGame.Price;
-            ShowcaseGameTitle.Text = currentGame.Title;
-            ShowcaseBuyBtn.DataContext = currentGame;
-
+            if (ShowcaseContent != null)
+            {
+                ShowcaseContent.DataContext = currentGame;
+            }
+            if (ShowcaseName != null) 
+            {
+                ShowcaseName.Text = currentGame.Title;
+            }
+            if (ShowcasePrice != null) 
+            {
+                ShowcasePrice.Text = currentGame.Price;
+            }
+            if (ShowcaseBuyBtn != null) 
+            {
+                ShowcaseBuyBtn.DataContext = currentGame;
+            }
+            
             if (PageIndicators != null)
             {
                 for (int i = 0; i < PageIndicators.Children.Count; i++)
@@ -332,6 +388,7 @@ namespace SteamLamp
         private void OpenGameDetails(Game game)
         {
             if (game == null) return;
+            GameDetailsOverlay.DataContext = game;
             ModalGameTitle.Text = game.Title;
             ModalGameDesc.Text = game.Description;
             ModalGamePrice.Text = game.Price;
@@ -361,6 +418,11 @@ namespace SteamLamp
                 BtnSupport.Visibility = Visibility.Visible;
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
+                if (CurrentRole == UserRole.Admin)
+                {
+                    return;
+                }
+
             }
             else
             {
