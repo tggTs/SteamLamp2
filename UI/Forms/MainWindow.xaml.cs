@@ -19,6 +19,8 @@ namespace SteamLamp
 {
     public class PathToImageConverter : IValueConverter
     {
+
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string dbPath = value as string;
