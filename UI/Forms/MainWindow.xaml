@@ -144,11 +144,21 @@
 
             <Border Grid.Row="0" Background="#2a2e33" MouseLeftButtonDown="Header_MouseDown" Panel.ZIndex="1">
                 <Grid>
-                    <StackPanel x:Name="MainMenuStack" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,15,0" Height="47">
-                        <TextBlock Text="STEAMLAMP" Foreground="White" FontWeight="Bold" VerticalAlignment="Top" Margin="0,0,20,0"/>
-                        <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="-60,20,15,0" Cursor="Hand" Click="OpenStore_Click"/>
-                        <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,20,15,0" Cursor="Hand" FontSize="21" Click="OpenLibrary_Click"/>
-                        <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,20,15,0" Cursor="Hand" Click="OpenProfile_Click"/>
+                    <StackPanel x:Name="MainMenuStack" Orientation="Vertical" VerticalAlignment="Center" Margin="15,0,15,0">
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Text="STEAMLAMP" Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,15,0" Opacity="0.8"/>
+                            <Button x:Name="BtnSupport" Content="Тех. поддержка" Visibility="Collapsed" Foreground="#919499" FontSize="10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="OpenSupport_Click" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenStore_Click"/>
+
+                            <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenLibrary_Click"/>
+
+                            <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenProfile_Click"/>
+                        </StackPanel>
+
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">

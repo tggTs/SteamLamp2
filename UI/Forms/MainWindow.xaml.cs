@@ -43,11 +43,13 @@ namespace SteamLamp
             }
             UpdateMenuHighlight(BtnStore);
         }
-        private void ApplyGuestMode() 
+        private void ApplyGuestMode()
         {
             CurrentRole = UserRole.Guest;
             LoginButton.Visibility = Visibility.Visible;
             AccountMenuButton.Visibility = Visibility.Collapsed;
+            BtnSupport.Visibility = Visibility.Collapsed;
+
             CartCountText.Text = "0";
             _cartList.Clear();
         }
@@ -353,9 +355,10 @@ namespace SteamLamp
         {
             if (Session.CurrentUser != null)
             {
-                CurrentRole = UserRole.User; 
+                CurrentRole = UserRole.User;
                 LoginButton.Visibility = Visibility.Collapsed;
                 AccountMenuButton.Visibility = Visibility.Visible;
+                BtnSupport.Visibility = Visibility.Visible;
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
             }
@@ -372,6 +375,14 @@ namespace SteamLamp
             authWindow.LoginForm.Visibility = Visibility.Visible;
             authWindow.Show();
             this.Close();
+        }
+
+        private void OpenSupport_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckAccess()) return;
+            SendMessageSupport supportPage = new SendMessageSupport();
+            MainContentFrame.Content = supportPage;
+            UpdateMenuHighlight(BtnSupport);
         }
     }
 }
