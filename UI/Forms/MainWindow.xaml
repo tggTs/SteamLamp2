@@ -7,6 +7,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <local:PathToImageConverter x:Key="PathToImageConverter"/>
 
         <Style x:Key="WindowControlButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -185,8 +186,8 @@
                                     <Grid x:Name="SearchContainer">
                                         <TextBox x:Name="SearchBox" Style="{StaticResource SearchTextBoxStyle}" Width="300" HorizontalAlignment="Left" Tag="Поиск по названию..." TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus"/>
                                         <Popup x:Name="SearchPopup" PlacementTarget="{Binding ElementName=SearchBox}" Placement="Bottom" AllowsTransparency="True" StaysOpen="False">
-                                             <Border Background="#2a2e33" BorderBrush="#3d4450" BorderThickness="1" Width="300">
-                                                 <ListBox x:Name="SearchResultsList" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SearchResultsList_SelectionChanged">
+                                            <Border Background="#2a2e33" BorderBrush="#3d4450" BorderThickness="1" Width="300">
+                                                <ListBox x:Name="SearchResultsList" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SearchResultsList_SelectionChanged">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
                                                             <Grid Margin="5">
@@ -195,7 +196,7 @@
                                                                     <ColumnDefinition Width="*"/>
                                                                 </Grid.ColumnDefinitions>
                                                                 <Border Background="#1b2838" Height="30" Width="45" CornerRadius="2" ClipToBounds="True">
-                                                                   
+                                                                    <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
                                                                 </Border>
                                                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
                                                                     <TextBlock Text="{Binding Title}" Foreground="White" FontSize="13" FontWeight="Bold"/>
@@ -234,7 +235,7 @@
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
                                             <Border Background="#212c3d" Margin="10" ClipToBounds="True">
-                                                
+                                                <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
                                             </Border>
                                             <StackPanel Grid.Column="1" Margin="10,20">
                                                 <TextBlock x:Name="ShowcaseName" Text="GameName" Foreground="White" FontSize="22" FontWeight="Bold"/>
@@ -273,13 +274,13 @@
                                                             </Border.RenderTransform>
                                                             <StackPanel>
                                                                 <Border Background="#212c3d" Height="120" CornerRadius="5,5,0,0" ClipToBounds="True">
-                                                                   
+                                                                    <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
                                                                 </Border>
                                                                 <StackPanel Margin="15,10,15,0">
                                                                     <TextBlock Text="{Binding Title}" Foreground="White" FontSize="16" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
                                                                     <TextBlock Text="{Binding Description}" Foreground="#898989" FontSize="11" Margin="0,5" Height="32" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
                                                                     <TextBlock Text="{Binding Price}" Foreground="White" FontSize="14" FontWeight="SemiBold" Margin="0,5"/>
-                                                                   
+
                                                                 </StackPanel>
                                                             </StackPanel>
                                                         </Border>
@@ -347,6 +348,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Border Background="#212c3d" CornerRadius="5" ClipToBounds="True">
+                            <Image Source="{Binding ImagePath, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
                         </Border>
 
                         <StackPanel Grid.Column="1" Margin="25,0,0,0">
@@ -356,7 +358,7 @@
                             </Grid>
                             <TextBlock x:Name="ModalGameDesc" Text="Описание" Foreground="#898989" Margin="0,20,0,0" TextWrapping="Wrap" Height="200" FontSize="14"/>
                             <TextBlock x:Name="ModalGamePrice" Text="1999 руб." Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,20,0,10"/>
-                           
+
                         </StackPanel>
                     </Grid>
                 </Border>

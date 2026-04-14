@@ -27,42 +27,39 @@ namespace SteamLamp
 
             try
             {
+                dbPath = dbPath.TrimStart('\\', '/');
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string fullPath = "";
+                string path1 = IOPath.Combine(baseDir, dbPath);
+                string projectRoot = IOPath.GetFullPath(IOPath.Combine(baseDir, "..", "..", ".."));
+                string path2 = IOPath.Combine(projectRoot, dbPath);
 
-                if (IOPath.IsPathRooted(dbPath) && File.Exists(dbPath))
-                {
-                    fullPath = dbPath;
-                }
-                else
-                {
-                    string path1 = IOPath.Combine(baseDir, dbPath);
-                    string projectRoot = IOPath.GetFullPath(IOPath.Combine(baseDir, "..", "..", ".."));
-                    string path2 = IOPath.Combine(projectRoot, dbPath);
+                string finalPath = null;
+                if (File.Exists(path1)) finalPath = path1;
+                else if (File.Exists(path2)) finalPath = path2;
 
-                    if (File.Exists(path1)) fullPath = path1;
-                    else if (File.Exists(path2)) fullPath = path2;
-                }
-
-                if (!string.IsNullOrEmpty(fullPath) && File.Exists(fullPath))
+                if (finalPath != null)
                 {
                     BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
+                    using (var stream = new FileStream(finalPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        bitmap.BeginInit();
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.StreamSource = stream;
+                        bitmap.EndInit();
+                    }
+                    bitmap.Freeze(); 
                     return bitmap;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ошибка пути: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки картинки: {ex.Message}");
             }
 
-            return null; 
+            return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)=> throw new NotImplementedException();
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
     public partial class MainWindow : Window
     {
