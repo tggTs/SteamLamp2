@@ -27,5 +27,6 @@ namespace SteamLamp
         public string Bio { get; set; } = "Добавьте описание профиля";
         public byte[] Avatar { get; set; }
         public bool IsOnline { get; set; }
+        public string Role { get; set; }
     }
 }
