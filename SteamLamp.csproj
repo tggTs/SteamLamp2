@@ -267,7 +267,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="UI\Resources\Assets\GameImage\DetailedImage\CS2Detailed.jpg" />
+    <Content Include="UI\Resources\Assets\GameImage\DetailedImage\CS2Detailed.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="UI\Resources\Assets\GameImage\DetailedImage\CS2Detailedd.jpg">
