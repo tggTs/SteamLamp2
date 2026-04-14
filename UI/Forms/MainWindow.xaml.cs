@@ -43,7 +43,6 @@ namespace SteamLamp
             }
             UpdateMenuHighlight(BtnStore);
         }
-<<<<<<< HEAD
         private void ApplyGuestMode() 
         {
             CurrentRole = UserRole.Guest;
@@ -61,7 +60,6 @@ namespace SteamLamp
             }
             return true;
         }
-=======
         private void SetOnlineStatus(bool isOnline)
         {
             try
@@ -90,7 +88,6 @@ namespace SteamLamp
             base.OnClosed(e);
         }
 
->>>>>>> 25c9404e1db1e44901244c77f4b01b1d122a43af
         private void LoadGamesFromDB()
         {
             try
