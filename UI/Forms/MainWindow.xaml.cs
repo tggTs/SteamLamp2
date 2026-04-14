@@ -299,7 +299,7 @@ namespace SteamLamp
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); } // Изменил на Close(), чтобы сработал OnClosed
+        private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); }
 
         private void MinimizeApp_Click(object sender, RoutedEventArgs e) { this.WindowState = WindowState.Minimized; }
 
@@ -405,7 +405,7 @@ namespace SteamLamp
         private void OpenWallet_Click(object sender, RoutedEventArgs e)
         {
             AccountPopup.IsOpen = false;
-            MainContentFrame.Content = new WalletPage(this);
+            MainContentFrame.Content = new WalletPage(this); 
         }
         public void UpdateUIState()
         {
