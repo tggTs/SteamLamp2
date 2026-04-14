@@ -392,8 +392,6 @@ namespace SteamLamp
             ModalGameTitle.Text = game.Title;
             ModalGameDesc.Text = game.Description;
             ModalGamePrice.Text = game.Price;
-            ModalBuyBtn.DataContext = game;
-            ModalBuyBtn.Tag = game.Title;
             GameDetailsOverlay.Visibility = Visibility.Visible;
         }
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
