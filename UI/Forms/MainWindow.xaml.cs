@@ -23,7 +23,7 @@ namespace SteamLamp
         {
             string path = value as string;
             if (string.IsNullOrEmpty(path)) return null;
-
+                    
             try
             {
                 string fullPath = IOPath.IsPathRooted(path) ? path : IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
