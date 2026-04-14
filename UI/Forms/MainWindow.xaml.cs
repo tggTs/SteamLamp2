@@ -22,15 +22,29 @@ namespace SteamLamp
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string path = value as string;
-            if (string.IsNullOrEmpty(path)) return null;
+            string dbPath = value as string;
+            if (string.IsNullOrEmpty(dbPath)) return null;
 
             try
             {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string fullPath = "";
 
-                string fullPath = IOPath.IsPathRooted(path)? path: IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+                if (IOPath.IsPathRooted(dbPath) && File.Exists(dbPath))
+                {
+                    fullPath = dbPath;
+                }
+                else
+                {
+                    string path1 = IOPath.Combine(baseDir, dbPath);
+                    string projectRoot = IOPath.GetFullPath(IOPath.Combine(baseDir, "..", "..", ".."));
+                    string path2 = IOPath.Combine(projectRoot, dbPath);
 
-                if (File.Exists(fullPath))
+                    if (File.Exists(path1)) fullPath = path1;
+                    else if (File.Exists(path2)) fullPath = path2;
+                }
+
+                if (!string.IsNullOrEmpty(fullPath) && File.Exists(fullPath))
                 {
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
@@ -40,12 +54,15 @@ namespace SteamLamp
                     return bitmap;
                 }
             }
-            catch (Exception ex){ Console.WriteLine("Ошибка статуса: " + ex.Message); }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка пути: " + ex.Message);
+            }
 
-            return null;
+            return null; 
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)=> throw new NotImplementedException();
     }
     public partial class MainWindow : Window
     {
