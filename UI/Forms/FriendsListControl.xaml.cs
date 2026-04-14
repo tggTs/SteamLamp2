@@ -50,15 +50,7 @@ namespace SteamLamp
             {
                 int myId = Session.CurrentUser.Id;
 
-                var myFriendsList = (from f in db.Friends
-                                     join u in db.Users on f.FriendId equals u.Id
-                                     where f.UserId == myId
-                                     select new
-                                     {
-                                         u.Id,
-                                         u.Nickname,
-                                         u.Avatar
-                                     }).ToList();
+                var myFriendsList = (from f in db.Friends join u in db.Users on f.FriendId equals u.Id where f.UserId == myId select new { u.Id, u.Nickname, u.Avatar}).ToList();
 
                 foreach (var friend in myFriendsList)
                 {

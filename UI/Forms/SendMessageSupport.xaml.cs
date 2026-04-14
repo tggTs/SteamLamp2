@@ -1,27 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SteamLamp
 {
-    /// <summary>
-    /// Логика взаимодействия для SendMessageSupport.xaml
-    /// </summary>
-    public partial class SendMessageSupport : Window
+    public partial class SendMessageSupport : UserControl
     {
         public SendMessageSupport()
         {
             InitializeComponent();
+        }
+
+        private void BtnSend_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(SupportMessageInput.Text))
+            {
+                SteamMessageBox.Show("Пожалуйста, опишите вашу проблему перед отправкой.", "Внимание", Window.GetWindow(this));
+                return;
+            }
+            SteamMessageBox.Show("Ваше обращение успешно отправлено в службу поддержки SteamLamp!", "Успех", Window.GetWindow(this));
+
+            SupportMessageInput.Clear();
+            TopicComboBox.SelectedIndex = 0;
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            SupportMessageInput.Clear();
+            var mainWindow = (MainWindow)Window.GetWindow(this);
+            mainWindow.OpenStore_Click(null, null);
         }
     }
 }
