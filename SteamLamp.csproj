@@ -142,6 +142,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\Contexts\AppDBContext.cs" />
+    <Compile Include="UI\Forms\SendMessageSupport.xaml.cs">
+      <DependentUpon>SendMessageSupport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\EditProfileControl.xaml.cs">
       <DependentUpon>EditProfileControl.xaml</DependentUpon>
     </Compile>
@@ -171,6 +174,10 @@
     <Compile Include="UI\Forms\WalletPage.xaml.cs">
       <DependentUpon>WalletPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="UI\Forms\SendMessageSupport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Forms\EditProfileControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

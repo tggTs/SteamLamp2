@@ -43,7 +43,6 @@ namespace SteamLamp
             }
             UpdateMenuHighlight(BtnStore);
         }
-<<<<<<< HEAD
         private void ApplyGuestMode() 
         {
             CurrentRole = UserRole.Guest;
@@ -61,7 +60,6 @@ namespace SteamLamp
             }
             return true;
         }
-=======
         private void SetOnlineStatus(bool isOnline)
         {
             try
@@ -89,8 +87,6 @@ namespace SteamLamp
             SetOnlineStatus(false);
             base.OnClosed(e);
         }
-
->>>>>>> 25c9404e1db1e44901244c77f4b01b1d122a43af
         private void LoadGamesFromDB()
         {
             try
@@ -246,7 +242,7 @@ namespace SteamLamp
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
 
-        private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); } // Изменил на Close(), чтобы сработал OnClosed
+        private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); }
 
         private void MinimizeApp_Click(object sender, RoutedEventArgs e) { this.WindowState = WindowState.Minimized; }
 
@@ -262,7 +258,6 @@ namespace SteamLamp
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            // ШАГ 3: Сбрасываем статус при выходе из аккаунта (Logout)
             SetOnlineStatus(false);
 
             AccountPopup.IsOpen = false;
