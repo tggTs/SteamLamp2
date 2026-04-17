@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using IOPath = System.IO.Path;
+using SteamLamp.UI.Forms;
 
 namespace SteamLamp
 {
@@ -207,9 +208,10 @@ namespace SteamLamp
             }
             if (gameToAdd != null)
             {
-                if (gameToAdd.Price.Trim().Equals("Бесплатно.", StringComparison.OrdinalIgnoreCase))
+                if (gameToAdd.Price.Trim().Replace(".", "").Equals("Бесплатно", StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show($"{gameToAdd.Title} успешно добавлена в вашу библиотеку!");
+                    // Тут должна быть логика сохранения в БД (Library), но пока (●'◡'●)
                     OpenLibrary_Click(null, null);
                     return;
                 }
@@ -351,15 +353,27 @@ namespace SteamLamp
 
         private void GameCard_Click(object sender, RoutedEventArgs e)
         {
-            var element = sender as FrameworkElement;
-            if (element == null) return;
-            var selectedGame = element.Tag as Game;
-            if (selectedGame != null) 
+            var border = sender as FrameworkElement;
+            var game = border.Tag as Game;
+
+            if (game != null)
             {
-                GameDetailsOverlay.DataContext = selectedGame;
+                GameDetailsOverlay.DataContext = game;
+                ModalGameTitle.Text = game.Title;
+                if (!string.IsNullOrEmpty(game.Developer))
+                {
+                    ModalGameDeveloper.Text = $"от создателей {game.Developer}";
+                    ModalGameDeveloper.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    ModalGameDeveloper.Visibility = Visibility.Collapsed;
+                }
+                ModalGameDesc.Text = game.Description;
+                ModalGamePrice.Text = game.Price;
                 GameDetailsOverlay.Visibility = Visibility.Visible;
             }
-            
+
         }
 
         private void CloseOverlay_Click(object sender, RoutedEventArgs e) => GameDetailsOverlay.Visibility = Visibility.Collapsed;
@@ -391,16 +405,62 @@ namespace SteamLamp
         {
             if (Session.CurrentUser != null)
             {
-                CurrentRole = UserRole.User;
+                CurrentRole = Session.CurrentUser.Role == "Admin" ? UserRole.Admin : UserRole.User; ;
                 LoginButton.Visibility = Visibility.Collapsed;
                 AccountMenuButton.Visibility = Visibility.Visible;
                 BtnSupport.Visibility = Visibility.Visible;
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
+                ApplyInterfaceByRole(CurrentRole == UserRole.Admin);
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
             }
             else ApplyGuestMode();
         }
+        private void ApplyInterfaceByRole(bool isAdmin) 
+        {
+            if (isAdmin)
+            {
+                BtnStore.Visibility = Visibility.Collapsed;
+                BtnLibrary.Visibility = Visibility.Collapsed;
+                BtnRequests.Visibility = Visibility.Visible;
+                BtnSupport.Visibility = Visibility.Visible;
+                BtnProfile.Visibility = Visibility.Collapsed;
+                OpenRequests_Click(null, null);
+                BtnSupport.Visibility = Visibility.Collapsed;
+                BtnUserData.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnProfile.Visibility = Visibility.Visible;
+                BtnLibrary.Visibility = Visibility.Visible;
+                BtnStore.Visibility = Visibility.Visible;
+                BtnSupport.Visibility = Visibility.Collapsed;
+                BtnUserData.Visibility = Visibility.Collapsed;
+            }
+        }
+        public void OpenUserData_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckAccess(UserRole.Admin)) return;
+            try
+            {
+                var adminPage = new UI.Forms.AdminDataPage();
+                MainContentFrame.Content = adminPage;
 
+                UpdateMenuHighlight(BtnUserData);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка навигации: {ex.Message}");
+            }
+        }
+        public void OpenRequests_Click(object sender, RoutedEventArgs e)
+        {
+            //if (!CheckAccess(UserRole.Admin)) return;
+            //MainContentFrame.Content = new RequestsPage();
+            //UpdateMenuHighlight(BtnRequests);
+        }
         public void ClearCart() { _cartList.Clear(); UpdateCartUI(); }
+
+
+        
     }
 }

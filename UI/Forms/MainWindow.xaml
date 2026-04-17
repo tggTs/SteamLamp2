@@ -166,6 +166,8 @@
                             <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenStore_Click"/>
                             <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenLibrary_Click"/>
                             <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenProfile_Click"/>
+                            <Button x:Name="BtnRequests" Content="ЗАЯВКИ" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenRequests_Click"/>
+                            <Button x:Name="BtnUserData" Content="ДАННЫЕ" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenUserData_Click"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -257,7 +259,7 @@
                                             </Border>
                                             <StackPanel Grid.Column="1" Margin="10,20">
                                                 <TextBlock x:Name="ShowcaseName" Text="GameName" Foreground="White" FontSize="22" FontWeight="Bold"/>
-                                                <TextBlock Text="От создателей LampSoft" Foreground="#898989" FontSize="12" Margin="0,5"/>
+                                                <TextBlock Text="{Binding Developer}" Foreground="#898989" FontSize="12" Margin="0,5"/>
                                                 <TextBlock x:Name="ShowcasePrice" Text="0 руб." Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,40,0,10"/>
                                                 <Button x:Name="ShowcaseBuyBtn" Content="В корзину" Style="{StaticResource BuyButtonStyle}" Click="AddToCart_Click" HorizontalAlignment="Left" Width="292" Height="37"/>
                                             </StackPanel>
@@ -314,15 +316,17 @@
                             </Border>
                             <StackPanel Grid.Column="1" Margin="25,0,0,0">
                                 <Grid>
-                                    <TextBlock x:Name="ModalGameTitle" Text="{Binding Title}" Foreground="White" FontSize="26" FontWeight="Bold" TextWrapping="Wrap" MaxWidth="250" HorizontalAlignment="Left"/>
-                                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Foreground="Gray" BorderThickness="0" FontSize="20" Cursor="Hand" Click="CloseOverlay_Click"/>
+                                    <TextBlock x:Name="ModalGameTitle" Foreground="White" FontSize="28" FontWeight="Bold" TextWrapping="Wrap" MaxWidth="300" HorizontalAlignment="Left"/>
+                                    <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseOverlay_Click" Style="{StaticResource CloseButtonStyle}"/>
                                 </Grid>
-
-                                <TextBlock x:Name="ModalGameDesc" Text="{Binding Description}" Foreground="#898989" Margin="0,20,0,0" TextWrapping="Wrap" Height="180" FontSize="14"/>
-
-                                <TextBlock x:Name="ModalGamePrice" Text="{Binding Price}" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,20,0,10"/>
-
-                                <Button Content="В корзину" Tag="{Binding}" Click="AddToCart_Click" Style="{StaticResource BuyButtonStyle}" HorizontalAlignment="Stretch" Height="45" FontSize="18" FontWeight="Bold" Margin="0,5,20,0"/>
+                                <TextBlock x:Name="ModalGameDeveloper" Foreground="#66c0f4" FontSize="14" FontWeight="SemiBold" Margin="0,5,0,0"/>
+                                <TextBlock x:Name="ModalGameDesc" Foreground="#c6d4df" Margin="0,15,0,0" TextWrapping="Wrap" Height="180" FontSize="14" LineHeight="20"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,20,0,0">
+                                    <Border Background="#000000" Padding="10,5" CornerRadius="3">
+                                        <TextBlock x:Name="ModalGamePrice" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <Button Content="В корзину" Click="AddToCart_Click" Tag="{Binding Title}" Style="{StaticResource BuyButtonStyle}" Margin="10,0,0,0" Padding="20,10"/>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Border>

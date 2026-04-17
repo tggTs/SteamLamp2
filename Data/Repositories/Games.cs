@@ -19,5 +19,6 @@ namespace SteamLamp
         public string ImagePath { get; set; } = string.Empty;
         public bool IsShowcase { get; set; }
         public string DetailedImagePath { get; set; }
+        public string Developer { get; set; }
     }
 }

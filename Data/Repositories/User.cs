@@ -23,7 +23,7 @@ namespace SteamLamp
         [Required]
         public string Password { get; set; }
 
-        public decimal Balance { get; set; } = 0;
+        public decimal Balance { get; set; } = 0m;
         public string Bio { get; set; } = "Добавьте описание профиля";
         public byte[] Avatar { get; set; }
         public bool IsOnline { get; set; }
