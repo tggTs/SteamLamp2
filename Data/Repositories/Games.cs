@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows.Media.Imaging;
 
 namespace SteamLamp
 {
@@ -20,5 +21,7 @@ namespace SteamLamp
         public bool IsShowcase { get; set; }
         public string DetailedImagePath { get; set; }
         public string Developer { get; set; }
+        [NotMapped]
+        public string paymentgameimage => ImagePath;
     }
 }

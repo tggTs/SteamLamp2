@@ -18,55 +18,6 @@ using SteamLamp.UI.Forms;
 
 namespace SteamLamp
 {
-    public class PathToImageConverter : IValueConverter
-    {
-
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string dbPath = value as string;
-            if (string.IsNullOrEmpty(dbPath)) return null;
-
-            try
-            {
-                dbPath = dbPath.TrimStart('\\', '/');
-                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string path1 = IOPath.Combine(baseDir, dbPath);
-                string projectRoot = IOPath.GetFullPath(IOPath.Combine(baseDir, "..", "..", ".."));
-                string path2 = IOPath.Combine(projectRoot, dbPath);
-                string fullPath = IOPath.IsPathRooted(dbPath) ? dbPath : IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, dbPath);
-
-                string finalPath = null;
-                if (File.Exists(path1)) finalPath = path1;
-                else if (File.Exists(path2)) finalPath = path2;
-
-                if (finalPath != null)
-                if (File.Exists(fullPath))
-                {
-                    BitmapImage bitmap = new BitmapImage();
-                    using (var stream = new FileStream(finalPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        bitmap.BeginInit();
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.StreamSource = stream;
-                        bitmap.EndInit();
-                    }
-                    bitmap.Freeze(); 
-                    return bitmap;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки картинки: {ex.Message}");
-            }
-            
-
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-    }
-
     public partial class MainWindow : Window
     {
         private List<Game> _cartList = new List<Game>();
@@ -76,13 +27,6 @@ namespace SteamLamp
         public enum UserRole { Guest, User, Admin }
         public UserRole CurrentRole = UserRole.Guest;
 
-        public static class СurrentUser
-        {
-            public static string Nickname { get; set; } = "Войти";
-            public static string Role { get; set; } = "Guest";
-            public static decimal Balance { get; set; } = 0;
-            public static bool IsAuthorized => Role != "Guest";
-        }
 
         public MainWindow()
         {
@@ -99,16 +43,13 @@ namespace SteamLamp
             UpdateMenuHighlight(BtnStore);
         }
 
-
+        //  Обработчики заголовка и кнопок окна 
         private void Header_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
-
         private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); }
-
         private void MinimizeApp_Click(object sender, RoutedEventArgs e) { this.WindowState = WindowState.Minimized; }
-
         private void MaximizeApp_Click(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Maximized)
@@ -123,6 +64,7 @@ namespace SteamLamp
             }
         }
 
+        //  Логика пользователей и прав 
         private void ApplyGuestMode()
         {
             CurrentRole = UserRole.Guest;
@@ -173,6 +115,8 @@ namespace SteamLamp
             SetOnlineStatus(false);
             base.OnClosed(e);
         }
+
+        //  Работа с данными (Магазин / Витрина) 
         private void LoadGamesFromDB()
         {
             try
@@ -211,7 +155,6 @@ namespace SteamLamp
                 if (gameToAdd.Price.Trim().Replace(".", "").Equals("Бесплатно", StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show($"{gameToAdd.Title} успешно добавлена в вашу библиотеку!");
-                    // Тут должна быть логика сохранения в БД (Library), но пока (●'◡'●)
                     OpenLibrary_Click(null, null);
                     return;
                 }
@@ -224,7 +167,7 @@ namespace SteamLamp
                     var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
                     BtnCart.Background = blueBrush;
                     var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
-                    timer.Tick += (s, args) => { BtnCart.Background = defaultBrush; timer.Stop(); };
+                    timer.Tick += (st, args) => { BtnCart.Background = defaultBrush; timer.Stop(); };
                     timer.Start();
                 }
             }
@@ -316,11 +259,21 @@ namespace SteamLamp
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string search = SearchBox.Text.Trim().ToLower();
-            if (string.IsNullOrWhiteSpace(search)) { SearchPopup.IsOpen = false; return; }
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                SearchPopup.IsOpen = false;
+                SearchResultsList.ItemsSource = null;
+                return;
+            }
             using (var db = new AppDbContext())
             {
                 var filtered = db.Games.Where(g => g.Title.ToLower().Contains(search)).Take(5).ToList();
-                if (filtered.Any()) { SearchResultsList.ItemsSource = filtered; SearchPopup.IsOpen = true; }
+                if (filtered.Any())
+                {
+                    SearchResultsList.ItemsSource = null;
+                    SearchResultsList.ItemsSource = filtered;
+                    SearchPopup.IsOpen = true;
+                }
                 else SearchPopup.IsOpen = false;
             }
         }
@@ -348,36 +301,22 @@ namespace SteamLamp
             ModalGameTitle.Text = game.Title;
             ModalGameDesc.Text = game.Description;
             ModalGamePrice.Text = game.Price;
+            ModalAddToCartBtn.Content = game.Price.Trim().Equals("Бесплатно", StringComparison.OrdinalIgnoreCase) ? "Добавить в библиотеку" : "В корзину";
             GameDetailsOverlay.Visibility = Visibility.Visible;
+            ModalGameDeveloper.Text = !string.IsNullOrEmpty(game.Developer) ? $"от создателей {game.Developer}" : "";
+            ModalGameDeveloper.Visibility = !string.IsNullOrEmpty(game.Developer) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void GameCard_Click(object sender, RoutedEventArgs e)
         {
             var border = sender as FrameworkElement;
-            var game = border.Tag as Game;
-
-            if (game != null)
+            if (border?.Tag is Game game)
             {
-                GameDetailsOverlay.DataContext = game;
-                ModalGameTitle.Text = game.Title;
-                if (!string.IsNullOrEmpty(game.Developer))
-                {
-                    ModalGameDeveloper.Text = $"от создателей {game.Developer}";
-                    ModalGameDeveloper.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    ModalGameDeveloper.Visibility = Visibility.Collapsed;
-                }
-                ModalGameDesc.Text = game.Description;
-                ModalGamePrice.Text = game.Price;
-                GameDetailsOverlay.Visibility = Visibility.Visible;
+                OpenGameDetails(game); 
             }
-
         }
 
         private void CloseOverlay_Click(object sender, RoutedEventArgs e) => GameDetailsOverlay.Visibility = Visibility.Collapsed;
-
         private void AccountMenuButton_Click(object sender, RoutedEventArgs e) => AccountPopup.IsOpen = !AccountPopup.IsOpen;
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -405,7 +344,7 @@ namespace SteamLamp
         {
             if (Session.CurrentUser != null)
             {
-                CurrentRole = Session.CurrentUser.Role == "Admin" ? UserRole.Admin : UserRole.User; ;
+                CurrentRole = Session.CurrentUser.Role == "Admin" ? UserRole.Admin : UserRole.User;
                 LoginButton.Visibility = Visibility.Collapsed;
                 AccountMenuButton.Visibility = Visibility.Visible;
                 BtnSupport.Visibility = Visibility.Visible;
@@ -415,17 +354,15 @@ namespace SteamLamp
             }
             else ApplyGuestMode();
         }
-        private void ApplyInterfaceByRole(bool isAdmin) 
+
+        private void ApplyInterfaceByRole(bool isAdmin)
         {
             if (isAdmin)
             {
                 BtnStore.Visibility = Visibility.Collapsed;
                 BtnLibrary.Visibility = Visibility.Collapsed;
                 BtnRequests.Visibility = Visibility.Visible;
-                BtnSupport.Visibility = Visibility.Visible;
                 BtnProfile.Visibility = Visibility.Collapsed;
-                OpenRequests_Click(null, null);
-                BtnSupport.Visibility = Visibility.Collapsed;
                 BtnUserData.Visibility = Visibility.Visible;
             }
             else
@@ -433,34 +370,85 @@ namespace SteamLamp
                 BtnProfile.Visibility = Visibility.Visible;
                 BtnLibrary.Visibility = Visibility.Visible;
                 BtnStore.Visibility = Visibility.Visible;
-                BtnSupport.Visibility = Visibility.Collapsed;
                 BtnUserData.Visibility = Visibility.Collapsed;
             }
         }
+
         public void OpenUserData_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckAccess(UserRole.Admin)) return;
             try
             {
-                var adminPage = new UI.Forms.AdminDataPage();
-                MainContentFrame.Content = adminPage;
-
+                MainContentFrame.Content = new UI.Forms.AdminDataPage();
                 UpdateMenuHighlight(BtnUserData);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка навигации: {ex.Message}");
-            }
+            catch (Exception ex) { MessageBox.Show($"Ошибка навигации: {ex.Message}"); }
         }
-        public void OpenRequests_Click(object sender, RoutedEventArgs e)
+
+        public void OpenRequests_Click(object sender, RoutedEventArgs e) 
         {
-            //if (!CheckAccess(UserRole.Admin)) return;
-            //MainContentFrame.Content = new RequestsPage();
-            //UpdateMenuHighlight(BtnRequests);
+            if (!CheckAccess(UserRole.Admin))
+            {
+                return;
+            }
+            //MainContentFrame.Content = new AdminRequestsPage();
+            UpdateMenuHighlight(BtnRequests);
         }
         public void ClearCart() { _cartList.Clear(); UpdateCartUI(); }
 
+        private void BtnAddMyGame_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var addGameWin = new SteamLamp.UI.Forms.AddGameWindow();
+                addGameWin.Owner = this;
+                addGameWin.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось открыть окно добавления игры: {ex.Message}");
+            }
+        }
+    }
 
-        
+
+    public class PathToImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string path = value as string;
+            if (string.IsNullOrEmpty(path)) return null;
+
+            try
+            {
+                string fullPath = path;
+
+                if (!IOPath.IsPathRooted(path))
+                {
+                    fullPath = IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+                }
+
+                if (File.Exists(fullPath))
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.UriSource = new Uri(fullPath);
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки картинки: {ex.Message}");
+            }
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

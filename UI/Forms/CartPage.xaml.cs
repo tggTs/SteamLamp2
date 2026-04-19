@@ -29,16 +29,33 @@ namespace SteamLamp
             _main = main;
             Refresh();
         }
-        private void Refresh() 
+        private void Refresh()
         {
+            if (_items != null)
+            {
+                foreach (var game in _items)
+                {
+                    if (!string.IsNullOrEmpty(game.ImagePath))
+                    {
+                        string cleanPath = game.ImagePath.Replace("\\", "/");
+                        if (!cleanPath.StartsWith("/")) cleanPath = "/" + cleanPath;
+                        game.ImagePath = $"pack://application:,,,/{cleanPath.TrimStart('/')}";
+                    }
+                }
+            }
+
             CartItemsControl.ItemsSource = null;
             CartItemsControl.ItemsSource = _items;
-            double total = _items.Sum(i => { if (string.IsNullOrWhiteSpace(i.Price)) return 0;
-                string p = i.Price.ToLower().Replace("руб.","").Replace(".","").Replace(" ","").Trim();
+            double total = _items.Sum(i => {
+                if (string.IsNullOrWhiteSpace(i.Price)) return 0;
+                string p = i.Price.ToLower().Replace("руб.", "").Replace(".", "").Replace(" ", "").Trim();
                 return double.TryParse(p, out double res) ? res : 0;
             });
+
             TotalAmountText.Text = $"{total:N2} руб.";
-            _main.CartCountText.Text = _items.Count.ToString();
+
+            if (_main != null && _main.CartCountText != null)
+                _main.CartCountText.Text = _items.Count.ToString();
         }
         private void RemoveItem_Click(object sender, RoutedEventArgs e) 
         {

@@ -40,6 +40,15 @@ namespace SteamLamp.UI.Forms
             if (UsersListBox.SelectedItem is User user)
             {
                 SelectedUserText.Text = user.Nickname;
+                TxtUserId.Text = user.Id.ToString();
+                TxtUserRole.Text = user.Role;
+                TxtUserBalance.Text = $"{user.Balance:N2} руб.";
+                UserDetailsPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SelectedUserText.Text = "Выберите пользователя";
+                UserDetailsPanel.Visibility = Visibility.Collapsed;
             }
         }
         private void ExportJson_Click(object sender, RoutedEventArgs e)
@@ -64,6 +73,49 @@ namespace SteamLamp.UI.Forms
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Ошибка при экспорте: {ex.Message}");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Сначала выберите пользователя из списка.");
+            }
+        }
+
+        private void DeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (UsersListBox.SelectedItem is User selectedUser)
+            {
+
+                if (Session.CurrentUser != null && selectedUser.Id == Session.CurrentUser.Id)
+                {
+                    MessageBox.Show("Вы не можете удалить собственную учетную запись администратора!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var result = MessageBox.Show($"Вы уверены, что хотите БЕЗВОЗВРАТНО удалить пользователя {selectedUser.Nickname}?",
+                                           "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        using (var db = new AppDbContext())
+                        {
+
+                            var userInDb = db.Users.Find(selectedUser.Id);
+                            if (userInDb != null)
+                            {
+                                db.Users.Remove(userInDb);
+                                db.SaveChanges();
+                                MessageBox.Show("Пользователь успешно удален.");
+                                LoadUsers(); // Обновляем список слева
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении: {ex.Message}\nВозможно, у пользователя есть связанные данные (покупки).");
                     }
                 }
             }
