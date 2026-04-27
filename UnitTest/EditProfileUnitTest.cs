@@ -59,7 +59,7 @@ namespace SteamLamp.Tests
         {
             string inputNickname = "";
             bool isValid = !string.IsNullOrWhiteSpace(inputNickname);
-            Assert.IsTrue(isValid, "Система пропустила пустой никнейм!");
+            Assert.IsFalse(isValid, "Система пропустила пустой никнейм!");
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace SteamLamp.Tests
         {
             string dangerousNick = "Stepka<script>";
             bool isSafe = !dangerousNick.Contains("<") && !dangerousNick.Contains(">");
-            Assert.IsTrue(isSafe, "Никнейм содержит запрещенные символы HTML-инъекции.");
+            Assert.IsFalse(isSafe, "Никнейм содержит запрещенные символы HTML-инъекции.");
         }
     }
 }

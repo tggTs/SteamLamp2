@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="SteamLamp.UI.Forms.AdminGamesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900"
+             Background="#1b2838">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1.2*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="20">
+            <TextBlock Text="База игр" Foreground="White" FontSize="22" Margin="0,0,0,15"/>
+
+            <ListBox x:Name="GamesListBox" Background="#2a475e"  Foreground="White" BorderThickness="0" Height="480" DisplayMemberPath="Title" SelectionChanged="GamesListBox_SelectionChanged">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="Margin" Value="0,2"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#3d4450"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </StackPanel>
+
+        <Border Grid.Column="1" Background="#16202d" Margin="10,20,20,20" CornerRadius="5">
+            <Grid Margin="15">
+                <StackPanel>
+                    <TextBlock Text="УПРАВЛЕНИЕ ИГРОЙ" Foreground="#66c0f4" FontSize="14" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock x:Name="SelectedGameTitle" Text="Выберите игру" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" TextTrimming="CharacterEllipsis"/>
+
+                    <Button Content="Сохранить изменения" Click="SaveGame_Click" 
+                            Background="#66c0f4" Foreground="Black" Padding="15,8" Margin="0,0,0,10" Cursor="Hand" BorderThickness="0" FontWeight="Bold"/>
+
+                    <Button Content="Удалить из базы" Click="DeleteGame_Click" 
+                            Background="#a62d2d" Foreground="White" Padding="15,8" FontWeight="Bold" Cursor="Hand" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#e81123"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Separator Background="#2a475e" Margin="0,20"/>
+
+                    <StackPanel x:Name="GameDetailsPanel" Visibility="Collapsed">
+                        <TextBlock Text="ПАРАМЕТРЫ" Foreground="#66c0f4" FontSize="12" Margin="0,0,0,10"/>
+
+                        <UniformGrid Columns="2">
+                            <TextBlock Text="ID:" Foreground="Gray" Margin="0,5"/>
+                            <TextBlock x:Name="TxtGameId" Foreground="White" Margin="0,5"/>
+
+                            <TextBlock Text="Название:" Foreground="Gray" Margin="0,5"/>
+                            <TextBox x:Name="EditTitle" Background="#212c3d" Foreground="White" BorderThickness="0" Padding="5,2" Margin="0,2"/>
+
+                            <TextBlock Text="Разработчик:" Foreground="Gray" Margin="0,5"/>
+                            <TextBox x:Name="EditDeveloper" Background="#212c3d" Foreground="White" BorderThickness="0" Padding="5,2" Margin="0,2"/>
+
+                            <TextBlock Text="Цена (руб):" Foreground="Gray" Margin="0,5"/>
+                            <TextBox x:Name="EditPrice" Background="#212c3d" Foreground="#75b022" FontWeight="Bold" BorderThickness="0" Padding="5,2" Margin="0,2"/>
+                        </UniformGrid>
+                        <TextBlock Text="Описание игры:" Foreground="Gray" Margin="0,15,0,5" FontSize="12"/>
+                        <TextBox x:Name="EditDescription"  Background="#212c3d" Foreground="White" BorderThickness="0"  Padding="8" Margin="0,2" MinHeight="100" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                        <TextBlock Text="Путь к изображению:" Foreground="Gray" Margin="0,15,0,5" FontSize="11"/>
+                        <TextBox x:Name="EditImagePath" Background="#212c3d" Foreground="White" BorderThickness="0" Padding="5,2" FontSize="10"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

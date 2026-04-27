@@ -5,12 +5,12 @@
         Title="Steam Lamp" Height="650" Width="1100"
         WindowStyle="None" 
         AllowsTransparency="True" 
+        ResizeMode="NoResize"
         Background="Transparent"
-        ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
 
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0"  ResizeBorderThickness="8" CornerRadius="20" GlassFrameThickness="0" />
+        <WindowChrome CaptionHeight="0"  ResizeBorderThickness="0" CornerRadius="20" GlassFrameThickness="0" />
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
@@ -162,11 +162,13 @@
                             <Button x:Name="BtnSupport" Content="Тех. поддержка" Visibility="Collapsed" Foreground="#919499" FontSize="10" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="OpenSupport_Click" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenStore_Click"/>
-                            <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenLibrary_Click"/>
-                            <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenProfile_Click"/>
-                            <Button x:Name="BtnRequests" Content="ЗАЯВКИ" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenRequests_Click"/>
-                            <Button x:Name="BtnUserData" Content="ДАННЫЕ" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenUserData_Click"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="BtnStore" Content="МАГАЗИН" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenStore_Click"/>
+                                <Button x:Name="BtnLibrary" Content="БИБЛИОТЕКА" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenLibrary_Click"/>
+                                <Button x:Name="BtnProfile" Content="ПРОФИЛЬ" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenProfile_Click"/>
+                                <Button x:Name="BtnGamesData" Content="ДАННЫЕ ИГР" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenGamesData_Click"/>
+                                <Button x:Name="BtnUserData" Content="ДАННЫЕ ПОЛЬЗОВАТЕЛЕЙ" Visibility="Collapsed" Style="{StaticResource SteamMenuButtonStyle}" Margin="0,0,20,0" Cursor="Hand" Click="OpenUserData_Click"/>
+                            </StackPanel> 
                         </StackPanel>
                     </StackPanel>
 
@@ -339,7 +341,7 @@
                         <ProgressBar IsIndeterminate="True" Width="100" Height="4" Margin="10,0" Foreground="#66c0f4" Background="#3d4450" BorderThickness="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <TextBlock Text="Вы разработчик?" Foreground="Gray" VerticalAlignment="Center" FontSize="11" Margin="0,0,10,0"/>
+                        <TextBlock x:Name="DeveloperPromptText" Text="Вы разработчик?" Foreground="Gray" VerticalAlignment="Center" FontSize="11" Margin="0,0,10,0"/>
                         <Button x:Name="BtnAddMyGame" Content="ХОТИТЕ ДОБАВИТЬ СВОЮ ИГРУ?" Click="BtnAddMyGame_Click" Foreground="#66c0f4" Background="Transparent" BorderBrush="#66c0f4" BorderThickness="1" Padding="10,2" FontSize="10" FontWeight="Bold" Cursor="Hand">
                             <Button.Style>
                                 <Style TargetType="Button">

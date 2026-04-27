@@ -21,7 +21,6 @@ namespace SteamLamp.UI.Forms
             InitializeComponent();
         }
 
-
         private void SelectPreview_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog { Filter = "Images|*.jpg;*.png;*.jpeg" };
@@ -41,14 +40,21 @@ namespace SteamLamp.UI.Forms
                 LblBannerPath.Text = Path.GetFileName(bannerPath);
             }
         }
-  
+
         private void SubmitGame_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TxtTitle.Text) || !decimal.TryParse(TxtPrice.Text, out decimal price))
+            if (string.IsNullOrWhiteSpace(TxtTitle.Text) ||
+                string.IsNullOrWhiteSpace(TxtDescription.Text) ||
+                string.IsNullOrWhiteSpace(TxtDeveloper.Text) ||
+                string.IsNullOrWhiteSpace(previewPath) ||
+                string.IsNullOrWhiteSpace(bannerPath) ||
+                !decimal.TryParse(TxtPrice.Text, out decimal price))
             {
-                MessageBox.Show("Заполните название и корректную цену!");
+                MessageBox.Show("Пожалуйста, заполните все текстовые поля, выберите изображения и укажите корректную цену!",
+                                "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
             MainForm.Visibility = Visibility.Collapsed;
             ProgressOverlay.Visibility = Visibility.Visible;
             currentProgress = 0;
@@ -88,11 +94,14 @@ namespace SteamLamp.UI.Forms
             {
                 using (var db = new AppDbContext())
                 {
+                    
+                    string formattedPrice = TxtPrice.Text.Trim() + " руб.";
+
                     var newGame = new Game
                     {
                         Title = TxtTitle.Text,
                         Description = TxtDescription.Text,
-                        Price = TxtPrice.Text, 
+                        Price = formattedPrice,
                         Developer = TxtDeveloper.Text,
                         ImagePath = previewPath,
                         DetailedImagePath = bannerPath

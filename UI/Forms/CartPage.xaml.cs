@@ -43,7 +43,6 @@ namespace SteamLamp
                     }
                 }
             }
-
             CartItemsControl.ItemsSource = null;
             CartItemsControl.ItemsSource = _items;
             double total = _items.Sum(i => {
@@ -51,7 +50,6 @@ namespace SteamLamp
                 string p = i.Price.ToLower().Replace("руб.", "").Replace(".", "").Replace(" ", "").Trim();
                 return double.TryParse(p, out double res) ? res : 0;
             });
-
             TotalAmountText.Text = $"{total:N2} руб.";
 
             if (_main != null && _main.CartCountText != null)
@@ -63,7 +61,6 @@ namespace SteamLamp
             _items.Remove(game);
             Refresh();
         }
-
         private void Purchase_Click(object sender, RoutedEventArgs e)
         {
             if (_items == null || _items.Count ==0)

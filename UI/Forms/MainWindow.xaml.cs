@@ -9,9 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
 using IOPath = System.IO.Path;
 using SteamLamp.UI.Forms;
@@ -26,7 +24,6 @@ namespace SteamLamp
         private HashSet<string> _cartItems = new HashSet<string>();
         public enum UserRole { Guest, User, Admin }
         public UserRole CurrentRole = UserRole.Guest;
-
 
         public MainWindow()
         {
@@ -43,11 +40,18 @@ namespace SteamLamp
             UpdateMenuHighlight(BtnStore);
         }
 
-        //  Обработчики заголовка и кнопок окна 
+        public void OpenUserData_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckAccess(UserRole.Admin)) return;
+            UpdateMenuHighlight(BtnUserData);
+            MainContentFrame.Content = new AdminDataPage();
+        }
+
         private void Header_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
+
         private void CloseApp_Click(object sender, RoutedEventArgs e) { this.Close(); }
         private void MinimizeApp_Click(object sender, RoutedEventArgs e) { this.WindowState = WindowState.Minimized; }
         private void MaximizeApp_Click(object sender, RoutedEventArgs e)
@@ -64,13 +68,12 @@ namespace SteamLamp
             }
         }
 
-        //  Логика пользователей и прав 
         private void ApplyGuestMode()
         {
             CurrentRole = UserRole.Guest;
             LoginButton.Visibility = Visibility.Visible;
             AccountMenuButton.Visibility = Visibility.Collapsed;
-            BtnSupport.Visibility = Visibility.Collapsed;
+            if (BtnSupport != null) BtnSupport.Visibility = Visibility.Collapsed;
             CartCountText.Text = "0";
             _cartList.Clear();
         }
@@ -116,7 +119,6 @@ namespace SteamLamp
             base.OnClosed(e);
         }
 
-        //  Работа с данными (Магазин / Витрина) 
         private void LoadGamesFromDB()
         {
             try
@@ -138,6 +140,11 @@ namespace SteamLamp
 
         public void AddToCart_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentRole == UserRole.Admin)
+            {
+                MessageBox.Show("Учетная запись администратора не предназначена для покупок.");
+                return;
+            }
             if (!CheckAccess()) return;
             e.Handled = true;
             var btn = sender as Button;
@@ -152,7 +159,7 @@ namespace SteamLamp
             }
             if (gameToAdd != null)
             {
-                if (gameToAdd.Price.Trim().Replace(".", "").Equals("Бесплатно", StringComparison.OrdinalIgnoreCase))
+                if (gameToAdd.Price.IndexOf("Бесплатно", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     MessageBox.Show($"{gameToAdd.Title} успешно добавлена в вашу библиотеку!");
                     OpenLibrary_Click(null, null);
@@ -162,7 +169,6 @@ namespace SteamLamp
                 {
                     _cartList.Add(gameToAdd);
                     UpdateCartUI();
-
                     var blueBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66c0f4"));
                     var defaultBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3d4450"));
                     BtnCart.Background = blueBrush;
@@ -205,10 +211,12 @@ namespace SteamLamp
 
         public void UpdateMenuHighlight(Button selectedButton)
         {
-            BtnStore.Tag = null;
-            BtnLibrary.Tag = null;
-            BtnProfile.Tag = null;
+            if (BtnStore != null) BtnStore.Tag = null;
+            if (BtnLibrary != null) BtnLibrary.Tag = null;
+            if (BtnProfile != null) BtnProfile.Tag = null;
             if (BtnSupport != null) BtnSupport.Tag = null;
+            if (BtnUserData != null) BtnUserData.Tag = null;
+            if (BtnGamesData != null) BtnGamesData.Tag = null;
             if (selectedButton != null) selectedButton.Tag = "Selected";
         }
 
@@ -244,6 +252,12 @@ namespace SteamLamp
 
         public void OpenWallet_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentRole == UserRole.Admin)
+            {
+                MessageBox.Show("Администратор не может пополнять баланс.");
+                AccountPopup.IsOpen = false;
+                return;
+            }
             AccountPopup.IsOpen = false;
             MainContentFrame.Content = new WalletPage(this);
         }
@@ -301,7 +315,19 @@ namespace SteamLamp
             ModalGameTitle.Text = game.Title;
             ModalGameDesc.Text = game.Description;
             ModalGamePrice.Text = game.Price;
-            ModalAddToCartBtn.Content = game.Price.Trim().Equals("Бесплатно", StringComparison.OrdinalIgnoreCase) ? "Добавить в библиотеку" : "В корзину";
+
+            // ЛОГИКА ДЛЯ АДМИНА:
+            if (CurrentRole == UserRole.Admin)
+            {
+                ModalAddToCartBtn.Visibility = Visibility.Collapsed; 
+            }
+            else
+            {
+                ModalAddToCartBtn.Visibility = Visibility.Visible;
+                ModalAddToCartBtn.Content = game.Price.Trim().Equals("Бесплатно", StringComparison.OrdinalIgnoreCase)
+                    ? "Добавить в библиотеку" : "В корзину";
+            }
+
             GameDetailsOverlay.Visibility = Visibility.Visible;
             ModalGameDeveloper.Text = !string.IsNullOrEmpty(game.Developer) ? $"от создателей {game.Developer}" : "";
             ModalGameDeveloper.Visibility = !string.IsNullOrEmpty(game.Developer) ? Visibility.Visible : Visibility.Collapsed;
@@ -312,7 +338,7 @@ namespace SteamLamp
             var border = sender as FrameworkElement;
             if (border?.Tag is Game game)
             {
-                OpenGameDetails(game); 
+                OpenGameDetails(game);
             }
         }
 
@@ -344,26 +370,40 @@ namespace SteamLamp
         {
             if (Session.CurrentUser != null)
             {
-                CurrentRole = Session.CurrentUser.Role == "Admin" ? UserRole.Admin : UserRole.User;
+                if (string.Equals(Session.CurrentUser.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    CurrentRole = UserRole.Admin;
+                }
+                else
+                {
+                    CurrentRole = UserRole.User;
+                }
                 LoginButton.Visibility = Visibility.Collapsed;
                 AccountMenuButton.Visibility = Visibility.Visible;
-                BtnSupport.Visibility = Visibility.Visible;
+                if (BtnSupport != null) BtnSupport.Visibility = Visibility.Visible;
                 AccountMenuButton.Content = Session.CurrentUser.Nickname + " ▼";
-                ApplyInterfaceByRole(CurrentRole == UserRole.Admin);
                 UserBalanceText.Text = "Баланс: " + Session.CurrentUser.Balance.ToString("N2") + " руб.";
+                ApplyInterfaceByRole(CurrentRole == UserRole.Admin);
             }
-            else ApplyGuestMode();
+            else
+            {
+                ApplyGuestMode();
+            }
         }
 
         private void ApplyInterfaceByRole(bool isAdmin)
         {
             if (isAdmin)
             {
-                BtnStore.Visibility = Visibility.Collapsed;
+                BtnStore.Visibility = Visibility.Visible;
                 BtnLibrary.Visibility = Visibility.Collapsed;
-                BtnRequests.Visibility = Visibility.Visible;
                 BtnProfile.Visibility = Visibility.Collapsed;
                 BtnUserData.Visibility = Visibility.Visible;
+                if (BtnGamesData != null) BtnGamesData.Visibility = Visibility.Visible;
+                if (BtnCart != null) BtnCart.Visibility = Visibility.Collapsed;
+                if (UserBalanceText != null) UserBalanceText.Visibility = Visibility.Collapsed;
+                if (BtnAddMyGame != null) BtnAddMyGame.Visibility = Visibility.Collapsed;
+                if (DeveloperPromptText != null) DeveloperPromptText.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -371,29 +411,25 @@ namespace SteamLamp
                 BtnLibrary.Visibility = Visibility.Visible;
                 BtnStore.Visibility = Visibility.Visible;
                 BtnUserData.Visibility = Visibility.Collapsed;
+                if (BtnGamesData != null) BtnGamesData.Visibility = Visibility.Collapsed;
+                if (BtnCart != null) BtnCart.Visibility = Visibility.Visible;
+                if (UserBalanceText != null) UserBalanceText.Visibility = Visibility.Visible;
+                if (BtnAddMyGame != null) BtnAddMyGame.Visibility = Visibility.Visible;
+                if (DeveloperPromptText != null) DeveloperPromptText.Visibility = Visibility.Visible;
             }
         }
 
-        public void OpenUserData_Click(object sender, RoutedEventArgs e)
+        public void OpenGamesData_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckAccess(UserRole.Admin)) return;
             try
             {
-                MainContentFrame.Content = new UI.Forms.AdminDataPage();
-                UpdateMenuHighlight(BtnUserData);
+                MainContentFrame.Content = new SteamLamp.UI.Forms.AdminGamesControl();
+                UpdateMenuHighlight(BtnGamesData);
             }
             catch (Exception ex) { MessageBox.Show($"Ошибка навигации: {ex.Message}"); }
         }
 
-        public void OpenRequests_Click(object sender, RoutedEventArgs e) 
-        {
-            if (!CheckAccess(UserRole.Admin))
-            {
-                return;
-            }
-            //MainContentFrame.Content = new AdminRequestsPage();
-            UpdateMenuHighlight(BtnRequests);
-        }
         public void ClearCart() { _cartList.Clear(); UpdateCartUI(); }
 
         private void BtnAddMyGame_Click(object sender, RoutedEventArgs e)
@@ -411,7 +447,6 @@ namespace SteamLamp
         }
     }
 
-
     public class PathToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -422,7 +457,6 @@ namespace SteamLamp
             try
             {
                 string fullPath = path;
-
                 if (!IOPath.IsPathRooted(path))
                 {
                     fullPath = IOPath.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
@@ -442,7 +476,6 @@ namespace SteamLamp
             {
                 System.Diagnostics.Debug.WriteLine($"Ошибка загрузки картинки: {ex.Message}");
             }
-
             return null;
         }
 

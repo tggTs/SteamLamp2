@@ -1,17 +1,17 @@
 ﻿<Window x:Class="SteamLamp.UI.Forms.AddGameWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Публикация игры" Height="600" Width="500"
-        WindowStartupLocation="CenterOwner" Background="#1b2838"
-        Foreground="White" WindowStyle="ToolWindow">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="500"
+             Background="#1b2838" Foreground="White">
 
     <Grid>
         <StackPanel x:Name="MainForm" Margin="20" Visibility="Visible">
             <TextBlock Text="ПУБЛИКАЦИЯ ИГРЫ" FontSize="20" FontWeight="Bold" Foreground="#66c0f4" Margin="0,0,0,20"/>
-
             <TextBlock Text="Название игры" Foreground="Gray" Margin="0,5"/>
             <TextBox x:Name="TxtTitle" Background="#2a475e" Foreground="White" BorderThickness="0" Padding="5" Margin="0,0,0,15"/>
-
             <TextBlock Text="Описание" Foreground="Gray" Margin="0,5"/>
             <TextBox x:Name="TxtDescription" Background="#2a475e" Foreground="White" BorderThickness="0" Padding="5" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,15"/>
 
@@ -34,16 +34,16 @@
             <TextBlock Text="Изображения" Foreground="Gray" Margin="0,5"/>
             <Button Content="Выбрать превью (450x410)" Click="SelectPreview_Click" Background="#3d4450" Foreground="White" Margin="0,0,0,5" BorderThickness="0" Padding="5"/>
             <TextBlock x:Name="LblPreviewPath" Text="Файл не выбран" FontSize="10" Foreground="#66c0f4" Margin="0,0,0,10"/>
+            
             <Button Content="Выбрать баннер (1156x650)" Click="SelectBanner_Click" Background="#3d4450" Foreground="White" Margin="0,0,0,5" BorderThickness="0" Padding="5"/>
             <TextBlock x:Name="LblBannerPath" Text="Файл не выбран" FontSize="10" Foreground="#66c0f4" Margin="0,0,0,20"/>
+            
             <Button x:Name="SubmitBtn" Content="ОТПРАВИТЬ НА ПРОВЕРКУ" Click="SubmitGame_Click" Height="40" FontWeight="Bold" Background="#75b022" Foreground="White" BorderThickness="0" Cursor="Hand"/>
         </StackPanel>
 
         <StackPanel x:Name="ProgressOverlay" Visibility="Collapsed" VerticalAlignment="Center">
             <TextBlock x:Name="StatusText" Text="Проверка игры модерацией..." Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
-            <ProgressBar x:Name="PublishProgressBar"  Minimum="0"  Maximum="100" Height="20" Width="300"  Foreground="#66c0f4"  Background="#3d4450" BorderThickness="0"/>
-
+            <ProgressBar x:Name="PublishProgressBar" Minimum="0" Maximum="100" Height="20" Width="300" Foreground="#66c0f4" Background="#3d4450" BorderThickness="0"/>
             <TextBlock x:Name="TimerText" Text="0%" Foreground="Gray" HorizontalAlignment="Center" Margin="0,5,0,0"/>
         </StackPanel>
     </Grid>

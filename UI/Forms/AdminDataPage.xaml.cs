@@ -93,8 +93,7 @@ namespace SteamLamp.UI.Forms
                     return;
                 }
 
-                var result = MessageBox.Show($"Вы уверены, что хотите БЕЗВОЗВРАТНО удалить пользователя {selectedUser.Nickname}?",
-                                           "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = MessageBox.Show($"Вы уверены, что хотите БЕЗВОЗВРАТНО удалить пользователя {selectedUser.Nickname}?","Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -109,7 +108,7 @@ namespace SteamLamp.UI.Forms
                                 db.Users.Remove(userInDb);
                                 db.SaveChanges();
                                 MessageBox.Show("Пользователь успешно удален.");
-                                LoadUsers(); // Обновляем список слева
+                                LoadUsers(); 
                             }
                         }
                     }
